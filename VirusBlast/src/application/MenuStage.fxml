@@ -5,10 +5,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.sceneController">
    <children>
-      <Button layoutX="544.0" layoutY="398.0" mnemonicParsing="false" onAction="#swithToGame" prefHeight="95.0" prefWidth="229.0" text="Play Game">
+      <Button layoutX="544.0" layoutY="398.0" mnemonicParsing="false" onAction="#switchToGame" prefHeight="95.0" prefWidth="229.0" text="Play Game">
          <font>
             <Font size="29.0" />
          </font>

@@ -9,12 +9,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class scenceController {
+public class sceneController {
 	private Stage stage;
 	private Scene scene; 
 	private Parent root;
 	
-	public void swithToMainMenu(ActionEvent event) throws IOException{
+	public void switchToMainMenu(ActionEvent event) throws IOException{
 		Parent root = FXMLLoader.load(getClass().getResource("MenuStage.fxml"));
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		scene = new Scene(root);
@@ -22,7 +22,7 @@ public class scenceController {
 		stage.show();
 	}
 	
-	public void swithToGame(ActionEvent event) throws IOException{
+	public void switchToGame(ActionEvent event) throws IOException{
 		Parent root = FXMLLoader.load(getClass().getResource("GameStage.fxml"));
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		scene = new Scene(root);

@@ -7,64 +7,63 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.sceneController">
    <children>
       <HBox alignment="CENTER" layoutX="-3.0" layoutY="568.0" prefHeight="140.0" prefWidth="1282.0" spacing="30.0">
          <children>
             <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@resources/acidOrb.png" />
+                  <Image url="@resources/img/Orbs/acidOrb.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@resources/baseOrb.png" />
+                  <Image url="@resources/img/Orbs/baseOrb.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="150.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@resources/bioOrb.png" />
+                  <Image url="@resources/img/Orbs/bioOrb.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="290.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@resources/chemicalOrb.png" />
+                  <Image url="@resources/img/Orbs/chemicalOrb.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="430.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@resources/coldOrb.png" />
+                  <Image url="@resources/img/Orbs/coldOrb.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="570.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@resources/crystialOrb.png" />
+                  <Image url="@resources/img/Orbs/crystialOrb.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="710.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@resources/earthOrb.png" />
+                  <Image url="@resources/img/Orbs/earthOrb.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="850.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@resources/electricOrb.png" />
+                  <Image url="@resources/img/Orbs/electricOrb.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="990.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@resources/heatOrb.png" />
+                  <Image url="@resources/img/Orbs/heatOrb.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="1130.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@resources/metalOrb.png" />
+                  <Image url="@resources/img/Orbs/metalOrb.png" />
                </image>
             </ImageView>
          </children>
       </HBox>
-      <Button layoutX="996.0" layoutY="36.0" mnemonicParsing="false" onAction="#swithToMainMenu" prefHeight="62.0" prefWidth="252.0" text="Main Menu">
+      <Button layoutX="996.0" layoutY="36.0" mnemonicParsing="false" onAction="#switchToMainMenu" prefHeight="62.0" prefWidth="252.0" text="Main Menu">
          <font>
             <Font size="27.0" />
          </font>
