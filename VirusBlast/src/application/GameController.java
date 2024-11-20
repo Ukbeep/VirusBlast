@@ -2,12 +2,11 @@ package application;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
@@ -32,6 +31,11 @@ public class GameController {
     @FXML
     private ImageView orb5; // Fifth orb
 
+    // Buttons for orb selection
+    @FXML
+    private Button aButton, sButton, dButton, fButton, gButton, 
+                   hButton, jButton, kButton, lButton, semicolonButton;
+
     private final Random random = new Random();
 
     // List of orbs collected by the player
@@ -48,16 +52,70 @@ public class GameController {
     private final Map<String, double[]> virusSizes = new HashMap<>(); // width and height
 
     public void initialize() {
-    	gamePane.setFocusTraversable(true);
-    	gamePane.requestFocus();
+        gamePane.setFocusTraversable(true);
+        gamePane.requestFocus();
         setupVirusConfigurations();
         startVirusSpawning();
-        System.out.println("GamePane dimensions: " + gamePane.getWidth() + " x " + gamePane.getHeight());
-
-        // Set up key event listener for adding orbs
-        gamePane.setOnKeyPressed(this::handleKeyPress);
         
+        // Attach event handlers to the buttons
+        aButton.setOnAction(event -> handleOrbClick(event));
+        sButton.setOnAction(event -> handleOrbClick(event));
+        dButton.setOnAction(event -> handleOrbClick(event));
+        fButton.setOnAction(event -> handleOrbClick(event));
+        gButton.setOnAction(event -> handleOrbClick(event));
+        hButton.setOnAction(event -> handleOrbClick(event));
+        jButton.setOnAction(event -> handleOrbClick(event));
+        kButton.setOnAction(event -> handleOrbClick(event));
+        lButton.setOnAction(event -> handleOrbClick(event));
+        semicolonButton.setOnAction(event -> handleOrbClick(event));
     }
+
+    
+
+@FXML
+private void handleOrbClick(ActionEvent event) {
+    // Get the button that was clicked
+    Button clickedButton = (Button) event.getSource();
+    String buttonText = clickedButton.getText();
+
+    // Map button text to orb types and add to the stack
+    switch (buttonText) {
+        case "A":
+            addOrb("heat"); // Red Orb
+            break;
+        case "S":
+            addOrb("cold"); // Blue Orb
+            break;
+        case "D":
+            addOrb("bio"); // Green Orb
+            break;
+        case "F":
+            addOrb("electric"); // Yellow Orb
+            break;
+        case "G":
+            addOrb("chemical"); // Purple Orb
+            break;
+        case "H":
+            addOrb("base"); // White Orb
+            break;
+        case "J":
+            addOrb("acid"); // Black Orb
+            break;
+        case "K":
+            addOrb("metal"); // Orange Orb
+            break;
+        case "L":
+            addOrb("crystal"); // Pink Orb
+            break;
+        case ";":
+            addOrb("earth"); // Brown Orb
+            break;
+        default:
+            System.out.println("Invalid button pressed.");
+    }
+}
+
+
 
     private void setupVirusConfigurations() {
         // Assign images to virus types
@@ -193,63 +251,21 @@ public class GameController {
         }
     }
 
-    // Handle key press events for orb selection
-    @FXML
-    private void handleKeyPress(KeyEvent event) {
-    	System.out.println("Key pressed: " + event.getCode());
-        if (currentOrbs.size() < 5) {  // Ensure there is space for more orbs
-            switch (event.getCode()) {
-                case A: // Heat Orb (Red)
-                    addOrb("heat");
-                    break;
-                case S: // Cold Orb (Blue)
-                    addOrb("cold");
-                    break;
-                case D: // Bio Orb (Green)
-                    addOrb("bio");
-                    break;
-                case F: // Electric Orb (Yellow)
-                    addOrb("electric");
-                    break;
-                case G: // Chemical Orb (Purple)
-                    addOrb("chemical");
-                    break;
-                case H: // Base Orb (White)
-                    addOrb("base");
-                    break;
-                case J: // Acid Orb (Black)
-                    addOrb("acid");
-                    break;
-                case K: // Metal Orb (Orange)
-                    addOrb("metal");
-                    break;
-                case L: // Crystal Orb (Pink)
-                    addOrb("crystal");
-                    break;
-                case SEMICOLON: // Earth Orb (Brown)
-                    addOrb("earth");
-                    break;
-                default:
-                    break;  // Ignore other keys
-            }
-        }
-    }
-
     // Get the correct image path for each orb element
     private String getOrbImagePath(String orbElement) {
         String basePath = "resources/img/Orbs/"; // Change this to the correct path of your orb images
         switch (orbElement) {
-            case "heat": return basePath + "heatOrb.png";
-            case "cold": return basePath + "coldOrb.png";
-            case "bio": return basePath + "bioOrb.png";
-            case "electric": return basePath + "electricOrb.png";
-            case "chemical": return basePath + "chemicalOrb.png";
-            case "base": return basePath + "baseOrb.png";
-            case "acid": return basePath + "acidOrb.png";
-            case "metal": return basePath + "metalOrb.png";
-            case "crystal": return basePath + "crystalOrb.png";
-            case "earth": return basePath + "earthOrb.png";
-            default: return basePath + "baseOrb.png";
+            case "heat": return getClass().getResource(basePath + "heatOrb.png").toExternalForm();
+            case "cold": return getClass().getResource(basePath + "coldOrb.png").toExternalForm();
+            case "bio": return getClass().getResource(basePath + "bioOrb.png").toExternalForm();
+            case "electric": return getClass().getResource(basePath + "electricOrb.png").toExternalForm();
+            case "chemical": return getClass().getResource(basePath + "chemicalOrb.png").toExternalForm();
+            case "base": return getClass().getResource(basePath + "baseOrb.png").toExternalForm();
+            case "acid": return getClass().getResource(basePath + "acidOrb.png").toExternalForm();
+            case "metal": return getClass().getResource(basePath + "metalOrb.png").toExternalForm();
+            case "crystal": return getClass().getResource(basePath + "crystalOrb.png").toExternalForm();
+            case "earth": return getClass().getResource(basePath + "earthOrb.png").toExternalForm();
+            default: return getClass().getResource(basePath + "baseOrb.png").toExternalForm();
         }
     }
 }
