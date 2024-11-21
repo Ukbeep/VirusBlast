@@ -7,10 +7,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<Pane fx:id="gamePane" focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.GameController">
+<Pane fx:id="gamePane" focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.GameController">
    <children>
-      <HBox alignment="CENTER" layoutX="1.0" layoutY="628.0" onInputMethodTextChanged="#initialize" onKeyPressed="#initialize" onKeyReleased="#initialize" onKeyTyped="#initialize" prefHeight="60.0" prefWidth="1282.0" spacing="60.0">
+      <HBox alignment="CENTER" layoutX="1.0" layoutY="628.0" prefHeight="60.0" prefWidth="1282.0" spacing="60.0">
          <children>
             <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -66,16 +67,16 @@
       </HBox>
       <HBox alignment="CENTER" layoutX="1.0" layoutY="675.0" prefHeight="45.0" prefWidth="1280.0" spacing="60.0">
          <children>
-            <Button fx:id="aButton" alignment="CENTER" contentDisplay="CENTER" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" onKeyPressed="#handleOrbClick" text="A" textAlignment="CENTER" />
-            <Button fx:id="sButton" alignment="CENTER" contentDisplay="CENTER" layoutX="624.0" layoutY="20.0" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" onKeyPressed="#handleOrbClick" text="S" textAlignment="CENTER" />
-            <Button fx:id="dButton" alignment="CENTER" contentDisplay="CENTER" layoutX="650.0" layoutY="20.0" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" onKeyPressed="#handleOrbClick" text="D" textAlignment="CENTER" />
-            <Button fx:id="fButton" alignment="CENTER" contentDisplay="CENTER" layoutX="676.0" layoutY="20.0" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" onKeyPressed="#handleOrbClick" text="F" textAlignment="CENTER" />
-            <Button fx:id="gButton" alignment="CENTER" contentDisplay="CENTER" layoutX="702.0" layoutY="20.0" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" onKeyPressed="#handleOrbClick" text="G" textAlignment="CENTER" />
-            <Button fx:id="hButton" alignment="CENTER" contentDisplay="CENTER" layoutX="728.0" layoutY="20.0" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" onKeyPressed="#handleOrbClick" text="H" textAlignment="CENTER" />
-            <Button fx:id="jButton" alignment="CENTER" contentDisplay="CENTER" layoutX="754.0" layoutY="20.0" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" onKeyPressed="#handleOrbClick" text="J" textAlignment="CENTER" />
-            <Button fx:id="kButton" alignment="CENTER" contentDisplay="CENTER" layoutX="780.0" layoutY="20.0" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" onKeyPressed="#handleOrbClick" text="K" textAlignment="CENTER" />
-            <Button fx:id="lButton" alignment="CENTER" contentDisplay="CENTER" layoutX="806.0" layoutY="20.0" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" onKeyPressed="#handleOrbClick" text="L" textAlignment="CENTER" />
-            <Button fx:id="semicolonButton" alignment="CENTER" contentDisplay="CENTER" layoutX="832.0" layoutY="20.0" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" onKeyPressed="#handleOrbClick" text=";" textAlignment="CENTER" />
+            <Button fx:id="aButton" alignment="CENTER" contentDisplay="CENTER" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" text="A" textAlignment="CENTER" />
+            <Button fx:id="sButton" alignment="CENTER" contentDisplay="CENTER" layoutX="624.0" layoutY="20.0" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" text="S" textAlignment="CENTER" />
+            <Button fx:id="dButton" alignment="CENTER" contentDisplay="CENTER" layoutX="650.0" layoutY="20.0" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" text="D" textAlignment="CENTER" />
+            <Button fx:id="fButton" alignment="CENTER" contentDisplay="CENTER" layoutX="676.0" layoutY="20.0" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" text="F" textAlignment="CENTER" />
+            <Button fx:id="gButton" alignment="CENTER" contentDisplay="CENTER" layoutX="702.0" layoutY="20.0" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" text="G" textAlignment="CENTER" />
+            <Button fx:id="hButton" alignment="CENTER" contentDisplay="CENTER" layoutX="728.0" layoutY="20.0" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" text="H" textAlignment="CENTER" />
+            <Button fx:id="jButton" alignment="CENTER" contentDisplay="CENTER" layoutX="754.0" layoutY="20.0" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" text="J" textAlignment="CENTER" />
+            <Button fx:id="kButton" alignment="CENTER" contentDisplay="CENTER" layoutX="780.0" layoutY="20.0" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" text="K" textAlignment="CENTER" />
+            <Button fx:id="lButton" alignment="CENTER" contentDisplay="CENTER" layoutX="806.0" layoutY="20.0" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" text="L" textAlignment="CENTER" />
+            <Button fx:id="semicolonButton" alignment="CENTER" contentDisplay="CENTER" layoutX="832.0" layoutY="20.0" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" text=";" textAlignment="CENTER" />
          </children>
       </HBox>
       <VBox layoutX="609.0" layoutY="479.0" prefHeight="200.0" prefWidth="63.0">
@@ -122,5 +123,19 @@
             </ImageView>
          </children>
       </VBox>
+      <HBox layoutY="713.0" prefHeight="44.0" prefWidth="1286.0">
+         <children>
+            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="44.0" prefWidth="643.0" text="Reset">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="636.0" text="Fire">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
    </children>
 </Pane>
