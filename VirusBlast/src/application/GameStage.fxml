@@ -40,7 +40,7 @@
             </ImageView>
             <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="570.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@resources/img/Orbs/crystialOrb.png" />
+                  <Image url="@resources/img/Orbs/crystalOrb.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="710.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
@@ -79,58 +79,98 @@
             <Button fx:id="semicolonButton" alignment="CENTER" contentDisplay="CENTER" layoutX="832.0" layoutY="20.0" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" text=";" textAlignment="CENTER" />
          </children>
       </HBox>
-      <VBox layoutX="609.0" layoutY="479.0" prefHeight="200.0" prefWidth="63.0">
+      <VBox layoutX="620.0" layoutY="475.0" prefHeight="200.0" prefWidth="42.0">
          <children>
-            <ImageView fx:id="orb1" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" visible="false">
+            <ImageView fx:id="orb1" fitHeight="60.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@resources/img/Orbs/bioOrb.png" />
                </image>
                <VBox.margin>
-                  <Insets />
+                  <Insets top="-20.0" />
                </VBox.margin>
             </ImageView>
-            <ImageView fx:id="orb2" fitHeight="60.0" fitWidth="60.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" visible="false">
+            <ImageView fx:id="orb2" fitHeight="60.0" fitWidth="40.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@resources/img/Orbs/bioOrb.png" />
                </image>
                <VBox.margin>
-                  <Insets top="-30.0" />
+                  <Insets top="-20.0" />
                </VBox.margin>
             </ImageView>
-            <ImageView fx:id="orb3" fitHeight="60.0" fitWidth="60.0" layoutX="10.0" layoutY="70.0" pickOnBounds="true" preserveRatio="true" visible="false">
+            <ImageView fx:id="orb3" fitHeight="60.0" fitWidth="40.0" layoutX="10.0" layoutY="70.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@resources/img/Orbs/bioOrb.png" />
                </image>
                <VBox.margin>
-                  <Insets top="-30.0" />
+                  <Insets top="-20.0" />
                </VBox.margin>
             </ImageView>
-            <ImageView fx:id="orb4" fitHeight="60.0" fitWidth="60.0" layoutX="10.0" layoutY="70.0" pickOnBounds="true" preserveRatio="true" visible="false">
+            <ImageView fx:id="orb4" fitHeight="60.0" fitWidth="40.0" layoutX="10.0" layoutY="70.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@resources/img/Orbs/bioOrb.png" />
                </image>
                <VBox.margin>
-                  <Insets top="-30.0" />
+                  <Insets top="-20.0" />
                </VBox.margin>
             </ImageView>
-            <ImageView fx:id="orb5" fitHeight="60.0" fitWidth="60.0" layoutX="10.0" layoutY="130.0" pickOnBounds="true" preserveRatio="true" visible="false">
+            <ImageView fx:id="orb5" fitHeight="60.0" fitWidth="40.0" layoutX="10.0" layoutY="130.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@resources/img/Orbs/bioOrb.png" />
                </image>
                <VBox.margin>
-                  <Insets top="-30.0" />
+                  <Insets top="-20.0" />
+               </VBox.margin>
+            </ImageView>
+            <ImageView fx:id="orb6" fitHeight="60.0" fitWidth="40.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@resources/img/Orbs/bioOrb.png" />
+               </image>
+               <VBox.margin>
+                  <Insets top="-20.0" />
+               </VBox.margin>
+            </ImageView>
+            <ImageView fx:id="orb7" fitHeight="60.0" fitWidth="40.0" layoutX="10.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@resources/img/Orbs/bioOrb.png" />
+               </image>
+               <VBox.margin>
+                  <Insets top="-20.0" />
+               </VBox.margin>
+            </ImageView>
+            <ImageView fx:id="orb8" fitHeight="60.0" fitWidth="40.0" layoutX="10.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@resources/img/Orbs/bioOrb.png" />
+               </image>
+               <VBox.margin>
+                  <Insets top="-20.0" />
+               </VBox.margin>
+            </ImageView>
+            <ImageView fx:id="orb9" fitHeight="60.0" fitWidth="40.0" layoutX="10.0" layoutY="40.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@resources/img/Orbs/bioOrb.png" />
+               </image>
+               <VBox.margin>
+                  <Insets top="-20.0" />
+               </VBox.margin>
+            </ImageView>
+            <ImageView fx:id="orb10" fitHeight="60.0" fitWidth="40.0" layoutX="10.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@resources/img/Orbs/bioOrb.png" />
+               </image>
+               <VBox.margin>
+                  <Insets top="-20.0" />
                </VBox.margin>
             </ImageView>
          </children>
       </VBox>
       <HBox layoutY="713.0" prefHeight="44.0" prefWidth="1286.0">
          <children>
-            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="44.0" prefWidth="643.0" text="Reset">
+            <Button fx:id="resetButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#resetOrb" prefHeight="44.0" prefWidth="643.0" text="Reset">
                <font>
                   <Font size="18.0" />
                </font>
             </Button>
-            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="636.0" text="Fire">
+            <Button fx:id="fireButton" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#fireOrbs" prefHeight="44.0" prefWidth="636.0" text="Fire">
                <font>
                   <Font size="18.0" />
                </font>

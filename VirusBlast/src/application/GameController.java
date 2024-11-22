@@ -2,16 +2,19 @@ package application;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -33,6 +36,16 @@ public class GameController {
     private ImageView orb4; // Fourth orb
     @FXML
     private ImageView orb5; // Fifth orb
+    @FXML
+    private ImageView orb6; // First orb
+    @FXML
+    private ImageView orb7; // Second orb
+    @FXML
+    private ImageView orb8; // Third orb
+    @FXML
+    private ImageView orb9; // Fourth orb
+    @FXML
+    private ImageView orb10; // Fifth orb
 
     // Buttons for orb selection
     @FXML
@@ -49,28 +62,43 @@ public class GameController {
             "basic", "double_orb", "triple_orb", "partial_immunity", "boss", "fast", "tank"
     };
     
+    @FXML
     private Button fireButton, resetButton;
     
     private final Map<String, List<String>> virusWeaknesses = Map.of(
     	    "basic", List.of("cold"),
     	    "double_orb", List.of("acid", "chemical"),
     	    "triple_orb", List.of("cold", "electric", "metal"),
-    	    "tank", List.of("acid", "chemical", "heat", "metal", "electric")
-    	);
-
-    private final Map<String, String> virusImages = new HashMap<>();
+    	    "tank", List.of("acid", "chemical", "heat", "metal", "electric"),
+    	    "partial_immunity", List.of("cold", "bio", "cold", "bio"),
+    	    "fast", List.of("cold", "electric"),
+    	    "boss", List.of("heat", "electric", "cold", "bio", "base", "chemical")
+    );
+    
+    //For label
+    private final Map<String, List<String>> virusWeaknessesLabel = Map.of(
+    		   "basic", List.of("G"),
+    		   "double_orb", List.of("A", "F"),
+    		   "triple_orb", List.of("G", "K", ";"),
+    		   "tank", List.of("A", "F", "L", ";", "K"),
+    		   "partial_immunity", List.of("G", "D", "G", "D"),
+    		   "fast", List.of("G", "K"),
+    		   "boss", List.of("L", "K", "G", "S", "F")
+    		);
+    final Map<String, String> virusImages = new HashMap<>();
     private final Map<String, Double> spawnRates = new HashMap<>(); // seconds per spawn
     private final Map<String, Double> fallSpeeds = new HashMap<>(); // speed in pixels per frame
     private final Map<String, double[]> virusSizes = new HashMap<>(); // width and height
 
     
-    
+   
     public void initialize() {
         gamePane.setFocusTraversable(true);
         gamePane.requestFocus();
         setupVirusConfigurations();
         startVirusSpawning();
-
+        disableButtonFocus();
+        Platform.runLater(() -> gamePane.requestFocus());
         // Attach event handlers to the buttons
         aButton.setOnAction(event -> handleOrbClick(event));
         sButton.setOnAction(event -> handleOrbClick(event));
@@ -82,13 +110,19 @@ public class GameController {
         kButton.setOnAction(event -> handleOrbClick(event));
         lButton.setOnAction(event -> handleOrbClick(event));
         semicolonButton.setOnAction(event -> handleOrbClick(event));
+        fireButton.setOnAction(event -> fireOrbs());
+        resetButton.setOnAction(event -> resetOrb());
 
+        
         
         gamePane.focusedProperty().addListener((obs, oldVal, newVal) -> {
             System.out.println("Game pane focused: " + newVal);
         });
         // Add key event handler for keyboard input
         gamePane.setOnKeyPressed(event -> {
+            // Consume the event to prevent default button focus
+            event.consume();
+
             switch (event.getCode()) {
                 case A:
                     addOrb("acid");
@@ -121,15 +155,33 @@ public class GameController {
                     addOrb("metal");
                     break;
                 case SPACE:
-                	fireOrbs();
-                	break;
+                    fireOrbs();
+                    break;
                 case CONTROL:
-                	resetOrb();
-                	break;
+                    resetOrb();
+                    break;
                 default:
                     break;
             }
         });
+
+        // Ensure game pane always has focus when clicked
+        gamePane.setOnMouseClicked(event -> gamePane.requestFocus());
+    }
+    
+    private void disableButtonFocus() {
+        aButton.setFocusTraversable(false);
+        sButton.setFocusTraversable(false);
+        dButton.setFocusTraversable(false);
+        fButton.setFocusTraversable(false);
+        gButton.setFocusTraversable(false);
+        hButton.setFocusTraversable(false);
+        jButton.setFocusTraversable(false);
+        kButton.setFocusTraversable(false);
+        lButton.setFocusTraversable(false);
+        semicolonButton.setFocusTraversable(false);
+        fireButton.setFocusTraversable(false);
+        resetButton.setFocusTraversable(false);
     }
 
 @FXML
@@ -180,8 +232,6 @@ private void handleOrbClick(ActionEvent event) {
             System.out.println("Invalid button pressed.");
     }
 }
-
-
 
     private void setupVirusConfigurations() {
         // Assign images to virus types
@@ -259,8 +309,20 @@ private void handleOrbClick(ActionEvent event) {
         virus.setX(random.nextDouble() * (gamePane.getWidth() - virus.getFitWidth()));
         virus.setY(-virus.getFitHeight()); // Start just outside the screen
 
+        // Create weakness label
+        Label weaknessLabel = new Label();
+        List<String> weaknesses = virusWeaknessesLabel.get(virusType);
+        if (weaknesses != null) {
+            weaknessLabel.setText(String.join("  ", weaknesses));
+            weaknessLabel.setStyle("-fx-font-size: 12px;"); // Default style, can be adjusted
+        }
+
+        // Position the label below the virus
+        weaknessLabel.setLayoutX(virus.getX());
+        weaknessLabel.setLayoutY(virus.getY() + virus.getFitHeight());
+
         // Add to gamePane
-        gamePane.getChildren().add(virus);
+        gamePane.getChildren().addAll(virus, weaknessLabel);
 
         // Get the falling speed for the virus
         double fallSpeed = fallSpeeds.get(virusType);
@@ -268,9 +330,11 @@ private void handleOrbClick(ActionEvent event) {
         // Animate its falling behavior
         Timeline fallAnimation = new Timeline(new KeyFrame(Duration.millis(20), event -> {
             virus.setY(virus.getY() + fallSpeed); // Falling speed
+            weaknessLabel.setLayoutY(weaknessLabel.getLayoutY() + fallSpeed);
+            
             if (virus.getY() > gamePane.getHeight()) {
                 // Remove when it falls out of bounds
-                gamePane.getChildren().remove(virus);
+                gamePane.getChildren().removeAll(virus, weaknessLabel);
             }
         }));
         fallAnimation.setCycleCount(Timeline.INDEFINITE);
@@ -285,6 +349,11 @@ private void handleOrbClick(ActionEvent event) {
         orb3.setVisible(false);
         orb4.setVisible(false);
         orb5.setVisible(false);
+        orb6.setVisible(false);
+        orb7.setVisible(false);
+        orb8.setVisible(false);
+        orb9.setVisible(false);
+        orb10.setVisible(false);
 
         // Loop through the currentOrbs stack and show corresponding orbs
         for (int i = 0; i < currentOrbs.size(); i++) {
@@ -299,6 +368,11 @@ private void handleOrbClick(ActionEvent event) {
                 case 2: orbView = orb3; break;
                 case 3: orbView = orb4; break;
                 case 4: orbView = orb5; break;
+                case 5: orbView = orb6; break;
+                case 6: orbView = orb7; break;
+                case 7: orbView = orb8; break;
+                case 8: orbView = orb9; break;
+                case 9: orbView = orb10; break;
             }
 
             // Set the orb image and make it visible
@@ -311,7 +385,7 @@ private void handleOrbClick(ActionEvent event) {
 
     // Method to add an orb to the stack
     private void addOrb(String orbElement) {
-        if (currentOrbs.size() < 5) {
+        if (currentOrbs.size() < 10) {
             currentOrbs.add(orbElement);
             updateOrbDisplay(); // Update the display
         }
@@ -337,26 +411,34 @@ private void handleOrbClick(ActionEvent event) {
     
     @FXML
     private void fireOrbs() {
-        if (currentOrbs.size() > 0) {
-            List<ImageView> virusesToRemove = new ArrayList<>();
-            
-            for (Node node : gamePane.getChildren()) {
-                if (node instanceof ImageView && isVirusImage((ImageView)node)) {
-                    String virusType = determineVirusType((ImageView)node);
-                    
-                    if (canDestroyVirus(virusType, currentOrbs)) {
-                        virusesToRemove.add((ImageView)node);
-                        addHitAnimation((ImageView)node);
-                    }
+        System.out.println("FireOrbs method called. Current orbs: " + currentOrbs);
+
+        if (currentOrbs.isEmpty()) {
+            System.out.println("No orbs to fire!");
+            return;
+        }
+
+        List<Node> virusesToRemove = new ArrayList<>();
+        
+        for (Node node : new ArrayList<>(gamePane.getChildren())) {
+            if (node instanceof ImageView && isVirusImage((ImageView)node)) {
+                String virusType = determineVirusType((ImageView)node);
+                
+                if (canDestroyVirus(virusType, currentOrbs)) {
+                    virusesToRemove.add(node);
+                    addHitAnimation((ImageView)node);
                 }
             }
-            
-            // Remove destroyed viruses from the game pane
-            gamePane.getChildren().removeAll(virusesToRemove);
-            
-            currentOrbs.clear();
-            updateOrbDisplay();
         }
+        
+        // Remove destroyed viruses from the game pane
+        gamePane.getChildren().removeAll(virusesToRemove);
+        
+        // Clear orbs after firing
+        currentOrbs.clear();
+        updateOrbDisplay();
+        
+        System.out.println("Fired orbs. Viruses destroyed: " + virusesToRemove.size());
     }
     
     @FXML
@@ -390,7 +472,22 @@ private void handleOrbClick(ActionEvent event) {
         
         if (requiredOrbs == null) return false;
         
-        return new HashSet<>(currentOrbs).containsAll(requiredOrbs);
+        // Create frequency maps for both required and current orbs
+        Map<String, Integer> requiredOrbFrequency = new HashMap<>();
+        Map<String, Integer> currentOrbFrequency = new HashMap<>();
+        
+        // Count frequencies for required orbs
+        for (String orb : requiredOrbs) {
+            requiredOrbFrequency.put(orb, requiredOrbFrequency.getOrDefault(orb, 0) + 1);
+        }
+        
+        // Count frequencies for current orbs
+        for (String orb : currentOrbs) {
+            currentOrbFrequency.put(orb, currentOrbFrequency.getOrDefault(orb, 0) + 1);
+        }
+        
+        // Compare the frequency maps
+        return requiredOrbFrequency.equals(currentOrbFrequency);
     }
     
     private void addHitAnimation(ImageView virusImage) {
