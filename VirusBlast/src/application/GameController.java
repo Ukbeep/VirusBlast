@@ -66,24 +66,24 @@ public class GameController {
     private Button fireButton, resetButton;
     
     private final Map<String, List<String>> virusWeaknesses = Map.of(
-    	    "basic", List.of("cold"),
-    	    "double_orb", List.of("acid", "chemical"),
-    	    "triple_orb", List.of("cold", "electric", "metal"),
-    	    "tank", List.of("acid", "chemical", "heat", "metal", "electric"),
-    	    "partial_immunity", List.of("cold", "bio", "cold", "bio"),
+    	    "basic", List.of("heat"),
+    	    "double_orb", List.of("acid", "heat"),
+    	    "triple_orb", List.of("heat", "electric", "metal"),
+    	    "partial_immunity", List.of("cold", "bio"),
+    	    "tank", List.of("acid", "chemical", "heat", "metal", "electric"),  
     	    "fast", List.of("cold", "electric"),
-    	    "boss", List.of("heat", "electric", "cold", "bio", "base", "chemical")
+    	    "boss", List.of("heat", "electric", "cold", "bio", "chemical")
     );
     
     //For label
     private final Map<String, List<String>> virusWeaknessesLabel = Map.of(
     		   "basic", List.of("G"),
-    		   "double_orb", List.of("A", "F"),
+    		   "double_orb", List.of("A", "G"),
     		   "triple_orb", List.of("G", "K", ";"),
-    		   "tank", List.of("A", "F", "L", ";", "K"),
-    		   "partial_immunity", List.of("G", "D", "G", "D"),
-    		   "fast", List.of("G", "K"),
-    		   "boss", List.of("L", "K", "G", "S", "F")
+    		   "partial_immunity", List.of("L", "D"),
+    		   "tank", List.of("A", "F", "G", ";", "K"),
+    		   "fast", List.of("L", "K"),
+    		   "boss", List.of("G", "K", "L", "D", "F")
     		);
     final Map<String, String> virusImages = new HashMap<>();
     private final Map<String, Double> spawnRates = new HashMap<>(); // seconds per spawn
@@ -113,8 +113,6 @@ public class GameController {
         fireButton.setOnAction(event -> fireOrbs());
         resetButton.setOnAction(event -> resetOrb());
 
-        
-        
         gamePane.focusedProperty().addListener((obs, oldVal, newVal) -> {
             System.out.println("Game pane focused: " + newVal);
         });
@@ -137,7 +135,7 @@ public class GameController {
                     addOrb("chemical");
                     break;
                 case G:
-                    addOrb("cold");
+                	addOrb("heat"); 
                     break;
                 case H:
                     addOrb("crystal");
@@ -149,7 +147,7 @@ public class GameController {
                     addOrb("electric");
                     break;
                 case L:
-                    addOrb("heat");
+                	addOrb("cold");
                     break;
                 case SEMICOLON:
                     addOrb("metal");
@@ -205,7 +203,7 @@ private void handleOrbClick(ActionEvent event) {
             addOrb("chemical"); // Purple Orb
             break;
         case "G":
-            addOrb("cold"); // Blue Orb
+        	addOrb("heat"); // Red Orb
             break;
         case "H":
             addOrb("crystal"); // Pink Orb
@@ -217,7 +215,7 @@ private void handleOrbClick(ActionEvent event) {
             addOrb("electric"); // Yellow Orb
             break;
         case "L":
-            addOrb("heat"); // Red Orb
+        	addOrb("cold");// Blue Orb
             break;
         case ";":
             addOrb("metal"); // orange Orb
@@ -418,29 +416,53 @@ private void handleOrbClick(ActionEvent event) {
             return;
         }
 
-        List<Node> virusesToRemove = new ArrayList<>();
-        
+        // Find the lowest virus that can be destroyed
+        ImageView lowestVirus = null;
+        double lowestY = -1;
+        Label associatedLabel = null;
+
+        // Get all nodes in the game pane
         for (Node node : new ArrayList<>(gamePane.getChildren())) {
             if (node instanceof ImageView && isVirusImage((ImageView)node)) {
-                String virusType = determineVirusType((ImageView)node);
+                ImageView virus = (ImageView)node;
+                String virusType = determineVirusType(virus);
                 
+                // Only attempt to destroy if we have the exact combination
                 if (canDestroyVirus(virusType, currentOrbs)) {
-                    virusesToRemove.add(node);
-                    addHitAnimation((ImageView)node);
+                    double virusY = virus.getY();
+                    if (virusY > lowestY) {
+                        lowestY = virusY;
+                        lowestVirus = virus;
+                        
+                        // Find the associated label
+                        for (Node labelNode : gamePane.getChildren()) {
+                            if (labelNode instanceof Label) {
+                                Label label = (Label)labelNode;
+                                if (Math.abs(label.getLayoutX() - virus.getX()) < 10 && 
+                                    Math.abs(label.getLayoutY() - (virus.getY() + virus.getFitHeight())) < 10) {
+                                    associatedLabel = label;
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
-        
-        // Remove destroyed viruses from the game pane
-        gamePane.getChildren().removeAll(virusesToRemove);
-        
+
+        // If we found a virus to destroy
+        if (lowestVirus != null) {
+            addHitAnimation(lowestVirus);
+            gamePane.getChildren().remove(lowestVirus);
+            if (associatedLabel != null) {
+                gamePane.getChildren().remove(associatedLabel);
+            }
+        }
+
         // Clear orbs after firing
         currentOrbs.clear();
         updateOrbDisplay();
-        
-        System.out.println("Fired orbs. Viruses destroyed: " + virusesToRemove.size());
-    }
-    
+    }    
     @FXML
     private void resetOrb() {
         currentOrbs.clear();
@@ -468,28 +490,28 @@ private void handleOrbClick(ActionEvent event) {
     }
     
     private boolean canDestroyVirus(String virusType, List<String> currentOrbs) {
+    	
         List<String> requiredOrbs = virusWeaknesses.get(virusType);
-        
+        System.out.println("Virus type: " + virusType + ", required orbs: " + requiredOrbs); // Debug statement
         if (requiredOrbs == null) return false;
         
-        // Create frequency maps for both required and current orbs
-        Map<String, Integer> requiredOrbFrequency = new HashMap<>();
-        Map<String, Integer> currentOrbFrequency = new HashMap<>();
-        
-        // Count frequencies for required orbs
-        for (String orb : requiredOrbs) {
-            requiredOrbFrequency.put(orb, requiredOrbFrequency.getOrDefault(orb, 0) + 1);
+        // Check if sizes match
+        if (currentOrbs.size() != requiredOrbs.size()) {
+            return false;
         }
         
-        // Count frequencies for current orbs
-        for (String orb : currentOrbs) {
-            currentOrbFrequency.put(orb, currentOrbFrequency.getOrDefault(orb, 0) + 1);
+        // Check if sequence matches exactly
+        for (int i = 0; i < requiredOrbs.size(); i++) {
+            if (!currentOrbs.get(i).equals(requiredOrbs.get(i))) {
+                return false;
+            }
         }
         
-        // Compare the frequency maps
-        return requiredOrbFrequency.equals(currentOrbFrequency);
+        return true;
     }
-    
+
+
+    // Helper method to add hit animation (unchanged)
     private void addHitAnimation(ImageView virusImage) {
         // Load the hit image
         Image hitImage = new Image(getClass().getResource("/application/resources/img/Animations/hit.png").toExternalForm());
@@ -504,13 +526,10 @@ private void handleOrbClick(ActionEvent event) {
         // Add the hit animation to the game pane
         gamePane.getChildren().add(hitAnimation);
 
-        // Remove both the hit animation and the virus image after a short duration
+        // Remove the hit animation after a short duration
         Timeline removeAnimation = new Timeline(new KeyFrame(
             Duration.seconds(0.5),
-            event -> {
-                gamePane.getChildren().remove(hitAnimation); // Remove the hit animation
-                gamePane.getChildren().remove(virusImage); // Remove the virus image
-            }
+            event -> gamePane.getChildren().remove(hitAnimation)
         ));
         removeAnimation.play();
     }

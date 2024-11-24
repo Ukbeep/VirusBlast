@@ -33,9 +33,9 @@
                   <Image url="@resources/img/Orbs/chemicalOrb.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="430.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="990.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@resources/img/Orbs/coldOrb.png" />
+                  <Image url="@resources/img/Orbs/heatOrb.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="570.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
@@ -53,9 +53,9 @@
                   <Image url="@resources/img/Orbs/electricOrb.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="990.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="430.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@resources/img/Orbs/heatOrb.png" />
+                  <Image url="@resources/img/Orbs/coldOrb.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="1130.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
