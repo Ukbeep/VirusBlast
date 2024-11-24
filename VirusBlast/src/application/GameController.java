@@ -235,9 +235,9 @@ private void handleOrbClick(ActionEvent event) {
         // Assign images to virus types
         String basePath = "resources/img/Viruses/";
         virusImages.put("basic", getClass().getResource(basePath + "basicVirus.png").toExternalForm());
-        virusImages.put("double_orb", getClass().getResource(basePath + "doubleOrbVirus.png").toExternalForm());
-        virusImages.put("triple_orb", getClass().getResource(basePath + "tripleOrbVirus.png").toExternalForm());
-        virusImages.put("partial_immunity", getClass().getResource(basePath + "partialImmuneVirus.png").toExternalForm());
+        virusImages.put("double_orb", getClass().getResource(basePath + "double_orb.png").toExternalForm());
+        virusImages.put("triple_orb", getClass().getResource(basePath + "triple_orb.png").toExternalForm());
+        virusImages.put("partial_immunity", getClass().getResource(basePath + "partial_immunity.png").toExternalForm());
         virusImages.put("boss", getClass().getResource(basePath + "bossVirus.png").toExternalForm());
         virusImages.put("fast", getClass().getResource(basePath + "fastVirus.png").toExternalForm());
         virusImages.put("tank", getClass().getResource(basePath + "tankVirus.png").toExternalForm());
@@ -480,34 +480,50 @@ private void handleOrbClick(ActionEvent event) {
     }
     
     private String determineVirusType(ImageView virusImage) {
-        String imagePath = virusImage.getImage().getUrl();
-        for (String virusType : virusTypes) {
-            if (imagePath.contains(virusType + "Virus")) {
-                return virusType;
+        String imagePath = virusImage.getImage().getUrl().toLowerCase(); // Make case-insensitive
+        
+        // Map of filename patterns to virus types
+        Map<String, String> virusPatterns = Map.of(
+            "basicvirus", "basic",
+            "double_orb", "double_orb",
+            "triple_orb", "triple_orb",
+            "partial_immunity", "partial_immunity",
+            "bossvirus", "boss",
+            "fastvirus", "fast",
+            "tankvirus", "tank"
+        );
+        
+        // Check each pattern
+        for (Map.Entry<String, String> entry : virusPatterns.entrySet()) {
+            if (imagePath.contains(entry.getKey().toLowerCase())) {
+                return entry.getValue();
             }
         }
-        return "basic";
+        
+        // Log unrecognized virus type for debugging
+        System.out.println("Unrecognized virus image path: " + imagePath);
+        return "basic"; // Default fallback
     }
     
     private boolean canDestroyVirus(String virusType, List<String> currentOrbs) {
-    	
-        List<String> requiredOrbs = virusWeaknesses.get(virusType);
-        System.out.println("Virus type: " + virusType + ", required orbs: " + requiredOrbs); // Debug statement
-        if (requiredOrbs == null) return false;
+        List<String> requiredOrbs = new ArrayList<>(virusWeaknesses.get(virusType));
         
-        // Check if sizes match
-        if (currentOrbs.size() != requiredOrbs.size()) {
+        if (requiredOrbs == null || currentOrbs.size() != requiredOrbs.size()) {
             return false;
         }
-        
-        // Check if sequence matches exactly
-        for (int i = 0; i < requiredOrbs.size(); i++) {
-            if (!currentOrbs.get(i).equals(requiredOrbs.get(i))) {
-                return false;
-            }
+
+        // Convert orb names to their corresponding weakness keys
+        List<String> currentOrbWeaknesses = new ArrayList<>();
+        for (String orb : currentOrbs) {
+            currentOrbWeaknesses.add(orb);
         }
-        
-        return true;
+
+        // Sort both lists to compare contents regardless of order
+        Collections.sort(requiredOrbs);
+        Collections.sort(currentOrbWeaknesses);
+
+        // Compare the sorted lists
+        return requiredOrbs.equals(currentOrbWeaknesses);
     }
 
 
