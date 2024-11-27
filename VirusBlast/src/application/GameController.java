@@ -23,6 +23,8 @@ import java.util.Random;
 
 public class GameController {
 
+	
+	
     @FXML
     private Pane gamePane;
 
@@ -89,8 +91,25 @@ public class GameController {
     private final Map<String, Double> spawnRates = new HashMap<>(); // seconds per spawn
     private final Map<String, Double> fallSpeeds = new HashMap<>(); // speed in pixels per frame
     private final Map<String, double[]> virusSizes = new HashMap<>(); // width and height
-
+    private final Map<String, Double> initialSpawnRates = new HashMap<>();
+    private final Map<String, Double> maxSpawnRates = new HashMap<>();
+    private final Map<String, Double> initialFallSpeeds = new HashMap<>();
+    private final Map<String, Double> maxFallSpeeds = new HashMap<>();
     
+    @FXML
+    private Label scoreLabel;
+    private int currentScore = 0;
+
+    // Define point values for different virus types
+    private final Map<String, Integer> virusPointValues = Map.of(
+        "basic", 10,
+        "fast", 20,
+        "double_orb", 30,
+        "partial_immunity", 40,
+        "triple_orb", 50,
+        "tank", 60,
+        "boss", 100
+    );
    
     public void initialize() {
         gamePane.setFocusTraversable(true);
@@ -242,23 +261,30 @@ private void handleOrbClick(ActionEvent event) {
         virusImages.put("fast", getClass().getResource(basePath + "fastVirus.png").toExternalForm());
         virusImages.put("tank", getClass().getResource(basePath + "tankVirus.png").toExternalForm());
 
-        // Adjust spawn rates (in seconds)
-        spawnRates.put("basic", 2.0);
-        spawnRates.put("double_orb", 6.0);
-        spawnRates.put("triple_orb", 12.0);
-        spawnRates.put("partial_immunity", 10.0);
-        spawnRates.put("boss", 20.0);
-        spawnRates.put("fast", 5.0);
-        spawnRates.put("tank", 13.0);
+        spawnRates.clear();
+        fallSpeeds.clear();
+        initialSpawnRates.clear();
+        maxSpawnRates.clear();
+        initialFallSpeeds.clear();
+        maxFallSpeeds.clear();
 
-        // Adjust falling speeds (in pixels per frame)
-        fallSpeeds.put("basic", 2.0);
-        fallSpeeds.put("double_orb", 1.5);
-        fallSpeeds.put("triple_orb", 1.2);
-        fallSpeeds.put("partial_immunity", 1.0);
-        fallSpeeds.put("boss", 0.8);
-        fallSpeeds.put("fast", 3.0);
-        fallSpeeds.put("tank", 0.5);
+        // Assign base spawn rates with initial and max values
+        setupVirusSpawnRate("basic", 2.0, 1.0, 0.5);
+        setupVirusSpawnRate("double_orb", 6.0, 3.0, 1.5);
+        setupVirusSpawnRate("triple_orb", 12.0, 6.0, 3.0);
+        setupVirusSpawnRate("partial_immunity", 10.0, 5.0, 2.5);
+        setupVirusSpawnRate("boss", 20.0, 10.0, 5.0);
+        setupVirusSpawnRate("fast", 5.0, 2.5, 1.0);
+        setupVirusSpawnRate("tank", 13.0, 6.5, 3.0);
+
+        // Assign base fall speeds with initial and max values
+        setupVirusFallSpeed("basic", 2.0, 4.0, 5.0);
+        setupVirusFallSpeed("double_orb", 1.5, 3.0, 4.0);
+        setupVirusFallSpeed("triple_orb", 1.2, 2.4, 3.5);
+        setupVirusFallSpeed("partial_immunity", 1.0, 2.0, 3.0);
+        setupVirusFallSpeed("boss", 0.8, 1.6, 2.5);
+        setupVirusFallSpeed("fast", 3.0, 5.0, 6.0);
+        setupVirusFallSpeed("tank", 0.5, 1.0, 2.0);
 
         // Set sizes (width, height)
         virusSizes.put("basic", new double[]{60, 60});
@@ -269,11 +295,67 @@ private void handleOrbClick(ActionEvent event) {
         virusSizes.put("fast", new double[]{50, 50});
         virusSizes.put("tank", new double[]{120, 120});
     }
+    
+    
+    
+    private void setupVirusSpawnRate(String virusType, double initial, double midPoint, double minimum) {
+        initialSpawnRates.put(virusType, initial);
+        maxSpawnRates.put(virusType, minimum);
+        spawnRates.put(virusType, initial);
+    }
+    
+    private void setupVirusFallSpeed(String virusType, double initial, double midPoint, double maximum) {
+        initialFallSpeeds.put(virusType, initial);
+        maxFallSpeeds.put(virusType, maximum);
+        fallSpeeds.put(virusType, initial);
+    }
+    
+    private void adjustDifficulty() {
+        // Linear difficulty progression
+        double difficultyFactor = 1.0;
+
+        if (currentScore >= 1000) {
+            // Highest difficulty level
+            difficultyFactor = 2.0;
+        } else if (currentScore >= 500) {
+            // Medium difficulty level
+            difficultyFactor = 1.5;
+        } else if (currentScore >= 100) {
+            // Initial difficulty increase
+            difficultyFactor = 1.25;
+        }
+
+        for (String virusType : virusTypes) {
+            // Adjust spawn rates
+            double initialRate = initialSpawnRates.get(virusType);
+            double minRate = maxSpawnRates.get(virusType);
+            double adjustedRate = Math.max(
+                minRate, 
+                initialRate / difficultyFactor
+            );
+            spawnRates.put(virusType, adjustedRate);
+
+            // Adjust fall speeds
+            double initialSpeed = initialFallSpeeds.get(virusType);
+            double maxSpeed = maxFallSpeeds.get(virusType);
+            double adjustedSpeed = Math.min(
+                maxSpeed, 
+                initialSpeed * difficultyFactor
+            );
+            fallSpeeds.put(virusType, adjustedSpeed);
+        }
+
+        // Optional: Introduce more boss-level challenges at 1000 points
+        if (currentScore >= 1000) {
+            // Increase boss virus spawn rate and decrease spawn interval
+            spawnRates.put("boss", spawnRates.get("boss") / 2.0);
+        }
+    }
+
 
     private void startVirusSpawning() {
         for (String virusType : virusTypes) {
             double spawnRate = spawnRates.get(virusType);
-
             Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(spawnRate), event -> {
                 createFallingVirus(virusType);
             }));
@@ -420,6 +502,7 @@ private void handleOrbClick(ActionEvent event) {
         ImageView lowestVirus = null;
         double lowestY = -1;
         Label associatedLabel = null;
+        String destroyedVirusType = null;
 
         // Get all nodes in the game pane
         for (Node node : new ArrayList<>(gamePane.getChildren())) {
@@ -433,6 +516,7 @@ private void handleOrbClick(ActionEvent event) {
                     if (virusY > lowestY) {
                         lowestY = virusY;
                         lowestVirus = virus;
+                        destroyedVirusType = virusType;
                         
                         // Find the associated label
                         for (Node labelNode : gamePane.getChildren()) {
@@ -452,6 +536,11 @@ private void handleOrbClick(ActionEvent event) {
 
         // If we found a virus to destroy
         if (lowestVirus != null) {
+            // Add points based on virus type
+            int pointsEarned = virusPointValues.getOrDefault(destroyedVirusType, 10);
+            currentScore += pointsEarned;
+            updateScoreLabel();
+
             addHitAnimation(lowestVirus);
             gamePane.getChildren().remove(lowestVirus);
             if (associatedLabel != null) {
@@ -462,16 +551,18 @@ private void handleOrbClick(ActionEvent event) {
         // Clear orbs after firing
         currentOrbs.clear();
         updateOrbDisplay();
-    }    
+    }
+    
+    private void updateScoreLabel() {
+        if (scoreLabel != null) {
+            scoreLabel.setText(String.valueOf(currentScore));
+            adjustDifficulty();
+        }
+    }
     @FXML
     private void resetOrb() {
         currentOrbs.clear();
         updateOrbDisplay();
-        
-        gamePane.getChildren().removeIf(node -> 
-            node instanceof ImageView && isVirusImage((ImageView)node)
-        );
-        
     }
     
     private boolean isVirusImage(ImageView imageView) {
