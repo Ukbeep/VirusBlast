@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ import java.util.Random;
 
 public class GameController {
 
+	
+	
     @FXML
     private Pane gamePane;
 
@@ -63,7 +66,21 @@ public class GameController {
     };
     
     @FXML
+    private Rectangle healthBar;
+    
+    private final Map<String, Integer> virusDamageValues = Map.of(
+            "basic", 4,
+            "double_orb", 6,	
+            "triple_orb", 10,
+            "partial_immunity", 15,
+            "tank", 25,
+            "boss", 40
+        );
+    
+    @FXML
     private Button fireButton, resetButton;
+    
+    private final Map<ImageView, Label> virusLabelMap = new HashMap<>();
     
     private final Map<String, List<String>> virusWeaknesses = Map.of(
     	    "basic", List.of("heat"),
@@ -85,19 +102,40 @@ public class GameController {
     		   "fast", List.of("L", "K"),
     		   "boss", List.of("G", "K", "L", "D", "F")
     		);
+    
     final Map<String, String> virusImages = new HashMap<>();
     private final Map<String, Double> spawnRates = new HashMap<>(); // seconds per spawn
     private final Map<String, Double> fallSpeeds = new HashMap<>(); // speed in pixels per frame
     private final Map<String, double[]> virusSizes = new HashMap<>(); // width and height
-
+    private final Map<String, Double> initialSpawnRates = new HashMap<>();
+    private final Map<String, Double> maxSpawnRates = new HashMap<>();
+    private final Map<String, Double> initialFallSpeeds = new HashMap<>();
+    private final Map<String, Double> maxFallSpeeds = new HashMap<>();
     
+    @FXML
+    private Label scoreLabel;
+    private int currentScore = 0;
+
+    // Define point values for different virus types
+    private final Map<String, Integer> virusPointValues = Map.of(
+        "basic", 10,
+        "fast", 20,
+        "double_orb", 30,
+        "partial_immunity", 40,
+        "triple_orb", 50,
+        "tank", 60,
+        "boss", 100
+    );
    
+    private int playerHealth = 100; // Player's health
+    
     public void initialize() {
         gamePane.setFocusTraversable(true);
         gamePane.requestFocus();
         setupVirusConfigurations();
         startVirusSpawning();
         disableButtonFocus();
+        updateHealthBar();
         Platform.runLater(() -> gamePane.requestFocus());
         // Attach event handlers to the buttons
         aButton.setOnAction(event -> handleOrbClick(event));
@@ -242,23 +280,31 @@ private void handleOrbClick(ActionEvent event) {
         virusImages.put("fast", getClass().getResource(basePath + "fastVirus.png").toExternalForm());
         virusImages.put("tank", getClass().getResource(basePath + "tankVirus.png").toExternalForm());
 
-        // Adjust spawn rates (in seconds)
-        spawnRates.put("basic", 2.0);
-        spawnRates.put("double_orb", 6.0);
-        spawnRates.put("triple_orb", 12.0);
-        spawnRates.put("partial_immunity", 10.0);
-        spawnRates.put("boss", 20.0);
-        spawnRates.put("fast", 5.0);
-        spawnRates.put("tank", 13.0);
+        spawnRates.clear();
+        fallSpeeds.clear();
+        initialSpawnRates.clear();
+        maxSpawnRates.clear();
+        initialFallSpeeds.clear();
+        maxFallSpeeds.clear();
 
-        // Adjust falling speeds (in pixels per frame)
-        fallSpeeds.put("basic", 2.0);
-        fallSpeeds.put("double_orb", 1.5);
-        fallSpeeds.put("triple_orb", 1.2);
-        fallSpeeds.put("partial_immunity", 1.0);
-        fallSpeeds.put("boss", 0.8);
-        fallSpeeds.put("fast", 3.0);
-        fallSpeeds.put("tank", 0.5);
+        // Assign base spawn rates with initial and max values
+        setupVirusSpawnRate("basic", 2.0, 1.0, 0.5);
+        setupVirusSpawnRate("double_orb", 6.0, 3.0, 1.5);
+        setupVirusSpawnRate("triple_orb", 12.0, 6.0, 3.0);
+        setupVirusSpawnRate("partial_immunity", 10.0, 5.0, 2.5);
+        setupVirusSpawnRate("boss", 20.0, 10.0, 5.0);
+        setupVirusSpawnRate("fast", 5.0, 2.5, 1.0);
+        setupVirusSpawnRate("tank", 13.0, 6.5, 3.0);
+
+        // Assign base fall speeds with initial and max values
+        //String virusType, double initial, double midPoint, double maximum
+        setupVirusFallSpeed("basic", 2.0, 4.0, 5.0);
+        setupVirusFallSpeed("double_orb", 1.5, 3.0, 4.0);
+        setupVirusFallSpeed("triple_orb", 1.2, 2.4, 3.5);
+        setupVirusFallSpeed("partial_immunity", 1.0, 2.0, 3.0);
+        setupVirusFallSpeed("boss", 0.8, 1.6, 2.5);
+        setupVirusFallSpeed("fast", 3.0, 5.0, 6.0);
+        setupVirusFallSpeed("tank", 0.5, 1.0, 2.0);
 
         // Set sizes (width, height)
         virusSizes.put("basic", new double[]{60, 60});
@@ -269,13 +315,88 @@ private void handleOrbClick(ActionEvent event) {
         virusSizes.put("fast", new double[]{50, 50});
         virusSizes.put("tank", new double[]{120, 120});
     }
+    
+    private void setupVirusSpawnRate(String virusType, double initial, double midPoint, double minimum) {
+        initialSpawnRates.put(virusType, initial);
+        maxSpawnRates.put(virusType, minimum);
+        spawnRates.put(virusType, initial);
+    }
+    
+    private void setupVirusFallSpeed(String virusType, double initial, double midPoint, double maximum) {
+        initialFallSpeeds.put(virusType, initial);
+        maxFallSpeeds.put(virusType, maximum);
+        fallSpeeds.put(virusType, initial);
+    }
+    
+    private void adjustDifficulty() {
+        // Linear difficulty progression
+        double difficultyFactor = 1.0;
+
+        if (currentScore >= 1000) {
+            // Highest difficulty level
+            difficultyFactor = 2.0;
+        } else if (currentScore >= 500) {
+            // Medium difficulty level
+            difficultyFactor = 1.5;
+        } else if (currentScore >= 100) {
+            // Initial difficulty increase
+            difficultyFactor = 1.25;
+        }
+
+        for (String virusType : virusTypes) {
+            // Adjust spawn rates
+            double initialRate = initialSpawnRates.get(virusType);
+            double minRate = maxSpawnRates.get(virusType);
+            double adjustedRate = Math.max(
+                minRate, 
+                initialRate / difficultyFactor
+            );
+            spawnRates.put(virusType, adjustedRate);
+
+            // Adjust fall speeds
+            double initialSpeed = initialFallSpeeds.get(virusType);
+            double maxSpeed = maxFallSpeeds.get(virusType);
+            double adjustedSpeed = Math.min(
+                maxSpeed, 
+                initialSpeed * difficultyFactor
+            );
+            fallSpeeds.put(virusType, adjustedSpeed);
+        }
+
+        // Optional: Introduce more boss-level challenges at 1000 points
+        if (currentScore >= 1000) {
+            // Increase boss virus spawn rate and decrease spawn interval
+            spawnRates.put("boss", spawnRates.get("boss") / 2.0);
+        }
+    }
+
 
     private void startVirusSpawning() {
         for (String virusType : virusTypes) {
             double spawnRate = spawnRates.get(virusType);
-
             Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(spawnRate), event -> {
-                createFallingVirus(virusType);
+                // Add score-based condition for spawning specific viruses
+                switch (virusType) {
+                    case "boss":
+                        if (currentScore >= 1000) {
+                            createFallingVirus(virusType);
+                        }
+                        break;
+                    case "tank":
+                        if (currentScore >= 600) {
+                            createFallingVirus(virusType);
+                        }
+                        break;
+                    case "partial_immunity":
+                        if (currentScore >= 200) {
+                            createFallingVirus(virusType);
+                        }
+                        break;
+                    default:
+                        // Other viruses spawn normally without score restrictions
+                        createFallingVirus(virusType);
+                        break;
+                }
             }));
             spawnTimeline.setCycleCount(Timeline.INDEFINITE);
             spawnTimeline.play();
@@ -289,18 +410,15 @@ private void handleOrbClick(ActionEvent event) {
 
         // Create the virus entity
         ImageView virus = new ImageView(virusImage);
-
-        // Get size for the virus type
         double[] size = virusSizes.get(virusType);
         if (size != null) {
             virus.setFitWidth(size[0]);
             virus.setFitHeight(size[1]);
         } else {
-            // Default size if not specified
+            // Default size if not found in the map
             virus.setFitWidth(80);
             virus.setFitHeight(80);
         }
-
         virus.setPreserveRatio(true);
 
         // Randomize its initial position
@@ -312,31 +430,53 @@ private void handleOrbClick(ActionEvent event) {
         List<String> weaknesses = virusWeaknessesLabel.get(virusType);
         if (weaknesses != null) {
             weaknessLabel.setText(String.join("  ", weaknesses));
-            weaknessLabel.setStyle("-fx-font-size: 12px;"); // Default style, can be adjusted
+            weaknessLabel.setId("weaknessLabel");
         }
 
-        // Position the label below the virus
-        weaknessLabel.setLayoutX(virus.getX());
-        weaknessLabel.setLayoutY(virus.getY() + virus.getFitHeight());
-
-        // Add to gamePane
+        // Add the virus and label to the gamePane
         gamePane.getChildren().addAll(virus, weaknessLabel);
+
+        // Store the mapping of virus and its label
+        virusLabelMap.put(virus, weaknessLabel);
+
+        // Center the label after adding it to the Pane
+        updateLabelPosition(weaknessLabel, virus);
 
         // Get the falling speed for the virus
         double fallSpeed = fallSpeeds.get(virusType);
 
+        // Use a flag to track if the virus is still active
+        final boolean[] isActive = {true};
+
         // Animate its falling behavior
         Timeline fallAnimation = new Timeline(new KeyFrame(Duration.millis(20), event -> {
-            virus.setY(virus.getY() + fallSpeed); // Falling speed
-            weaknessLabel.setLayoutY(weaknessLabel.getLayoutY() + fallSpeed);
-            
-            if (virus.getY() > gamePane.getHeight()) {
-                // Remove when it falls out of bounds
-                gamePane.getChildren().removeAll(virus, weaknessLabel);
+            if (isActive[0] && gamePane.getChildren().contains(virus)) { // Check if virus exists
+                virus.setY(virus.getY() + fallSpeed); // Falling speed
+                weaknessLabel.setLayoutY(weaknessLabel.getLayoutY() + fallSpeed);
+
+                // Update the position of the label to keep it centered
+                updateLabelPosition(weaknessLabel, virus);
+                
+                // Check if the virus has reached the bottom
+                if (virus.getY() > gamePane.getHeight()) {
+                    if (isActive[0]) {
+                        triggerHitEffect(virus, virusType); // Reduce health
+                    }
+                    isActive[0] = false; // Set to inactive
+                    // Remove the virus and its label when it falls out of bounds
+                    gamePane.getChildren().removeAll(virus, weaknessLabel);
+                    virusLabelMap.remove(virus); // Remove from the map
+                }
             }
         }));
         fallAnimation.setCycleCount(Timeline.INDEFINITE);
         fallAnimation.play();
+    }
+
+    // Helper method to update the label position
+    private void updateLabelPosition(Label weaknessLabel, ImageView virus) {
+        weaknessLabel.setLayoutX(virus.getX() + (virus.getFitWidth() - weaknessLabel.getLayoutBounds().getWidth()) / 2);
+        weaknessLabel.setLayoutY(virus.getY() + virus.getFitHeight() + 5); // Adjust Y position as needed
     }
 
     // Method to update the orb display based on the currentOrbs stack
@@ -420,6 +560,7 @@ private void handleOrbClick(ActionEvent event) {
         ImageView lowestVirus = null;
         double lowestY = -1;
         Label associatedLabel = null;
+        String destroyedVirusType = null;
 
         // Get all nodes in the game pane
         for (Node node : new ArrayList<>(gamePane.getChildren())) {
@@ -433,18 +574,11 @@ private void handleOrbClick(ActionEvent event) {
                     if (virusY > lowestY) {
                         lowestY = virusY;
                         lowestVirus = virus;
+                        destroyedVirusType = virusType;
                         
-                        // Find the associated label
-                        for (Node labelNode : gamePane.getChildren()) {
-                            if (labelNode instanceof Label) {
-                                Label label = (Label)labelNode;
-                                if (Math.abs(label.getLayoutX() - virus.getX()) < 10 && 
-                                    Math.abs(label.getLayoutY() - (virus.getY() + virus.getFitHeight())) < 10) {
-                                    associatedLabel = label;
-                                    break;
-                                }
-                            }
-                        }
+                        // Find the associated label using the mapping
+                        // Find the associated label using the mapping
+                        associatedLabel = virusLabelMap.get(virus);
                     }
                 }
             }
@@ -452,26 +586,37 @@ private void handleOrbClick(ActionEvent event) {
 
         // If we found a virus to destroy
         if (lowestVirus != null) {
+            // Add points based on virus type
+            int pointsEarned = virusPointValues.getOrDefault(destroyedVirusType, 10);
+            currentScore += pointsEarned;
+            updateScoreLabel();
+
             addHitAnimation(lowestVirus);
             gamePane.getChildren().remove(lowestVirus);
+            
+            // Remove the associated label if it exists
             if (associatedLabel != null) {
                 gamePane.getChildren().remove(associatedLabel);
+                // Also remove from the mapping
+                virusLabelMap.remove(lowestVirus);
             }
         }
 
         // Clear orbs after firing
         currentOrbs.clear();
         updateOrbDisplay();
-    }    
+    }
+    
+    private void updateScoreLabel() {
+        if (scoreLabel != null) {
+            scoreLabel.setText(String.valueOf(currentScore));
+            adjustDifficulty();
+        }
+    }
     @FXML
     private void resetOrb() {
         currentOrbs.clear();
         updateOrbDisplay();
-        
-        gamePane.getChildren().removeIf(node -> 
-            node instanceof ImageView && isVirusImage((ImageView)node)
-        );
-        
     }
     
     private boolean isVirusImage(ImageView imageView) {
@@ -549,4 +694,60 @@ private void handleOrbClick(ActionEvent event) {
         ));
         removeAnimation.play();
     }
+    
+    private void updateHealthBar() {
+        double maxHealth = 100; // Assuming the maximum health is 100
+        double maxWidth = 1282; // Assuming the maximum width of the health bar
+        healthBar.setWidth((playerHealth / maxHealth) * maxWidth); // Update width based on current health
+    }
+    
+    private void triggerHitEffect(ImageView virus, String virusType) {
+        // Reduce health based on the virus type
+        int damage = virusDamageValues.getOrDefault(virusType, 0); // Default to 0 if not found
+        playerHealth = Math.max(0, playerHealth - damage); // Ensure health doesn't go below 0
+        updateHealthBar();
+
+        // Debug output
+        System.out.println("Player Health: " + playerHealth);
+        System.out.println("Health Bar Width: " + healthBar.getWidth());
+
+        // Play hit animation
+        Image hitImage = new Image(getClass().getResource("/application/resources/img/Animations/BloodOverlay.png").toExternalForm());
+        ImageView hitAnimation = new ImageView(hitImage);
+        if (hitImage == null || hitImage.isError()) {
+            System.out.println("Error loading image: " + hitImage.getException());
+        } else {
+            System.out.println("Image loaded successfully.");
+        }
+        
+        for (Node node : new ArrayList<>(gamePane.getChildren())) {
+            if (node instanceof ImageView && node == virus) {
+                // Find and remove associated weakness label
+                for (Node labelNode : gamePane.getChildren()) {
+                    if (labelNode instanceof Label && labelNode.getLayoutX() == virus.getX()) {
+                        gamePane.getChildren().remove(labelNode);
+                        break;
+                    }
+                }
+                // Remove the virus
+                gamePane.getChildren().remove(node);
+                break;
+            }
+        }
+        hitAnimation.setX(0);
+        hitAnimation.setY(0);
+        hitAnimation.setFitWidth(gamePane.getWidth());
+        hitAnimation.setFitHeight(gamePane.getHeight());
+        gamePane.getChildren().add(hitAnimation);
+        hitAnimation.toFront();
+        hitAnimation.setOpacity(0.5);
+        
+        Timeline removeAnimation = new Timeline(new KeyFrame(
+            Duration.seconds(0.5),
+            event -> gamePane.getChildren().remove(hitAnimation)
+        ));
+        removeAnimation.play();
+    }
+    
+
 }
