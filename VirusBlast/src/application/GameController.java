@@ -8,15 +8,20 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -91,6 +96,8 @@ public class GameController {
     		   "boss", List.of("G", "K", "L", "D", "F", "S", "A", "G", "G", "K")
     		);
     
+    private Timeline virusSpawnTimeline; // Store the timeline for virus spawning
+    private List<Timeline> activeTimelines = new ArrayList<>(); // Store active timelines if needed
     final Map<String, String> virusImages = new HashMap<>();
     private final Map<String, Double> spawnRates = new HashMap<>(); // seconds per spawn
     private final Map<String, Double> fallSpeeds = new HashMap<>(); // speed in pixels per frame
@@ -116,8 +123,10 @@ public class GameController {
     );
    
     private int playerHealth = 100; // Player's health
-    
+    private boolean isGameOver = false; // Track if the game is over
+
     public void initialize() {
+    	GameStatistics.getInstance().loadStatistics();
         gamePane.setFocusTraversable(true);
         gamePane.requestFocus();
         setupVirusConfigurations();
@@ -358,7 +367,7 @@ private void handleOrbClick(ActionEvent event) {
             // Initial difficulty increase
             difficultyFactor = 1.25;
         }
-
+        
         for (String virusType : virusTypes) {
             // Adjust spawn rates
             double initialRate = initialSpawnRates.get(virusType);
@@ -416,6 +425,7 @@ private void handleOrbClick(ActionEvent event) {
             }));
             spawnTimeline.setCycleCount(Timeline.INDEFINITE);
             spawnTimeline.play();
+            activeTimelines.add(spawnTimeline);
         }
     }
 
@@ -722,7 +732,11 @@ private void handleOrbClick(ActionEvent event) {
         int damage = virusDamageValues.getOrDefault(virusType, 0); // Default to 0 if not found
         playerHealth = Math.max(0, playerHealth - damage); // Ensure health doesn't go below 0
         updateHealthBar();
-
+        if (playerHealth <= 0) {
+        	isGameOver = true;
+            displayPostGameSummary();
+            stopGame();// Call the summary display if health is zero
+        }
         // Debug output
         System.out.println("Player Health: " + playerHealth);
         System.out.println("Health Bar Width: " + healthBar.getWidth());
@@ -801,6 +815,85 @@ private void handleOrbClick(ActionEvent event) {
 
         // Play the animation
         animation.play();
+    }
+    
+    private void displayPostGameSummary() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("SummaryView.fxml"));
+            Parent summaryView = loader.load();
+            SummaryController summaryController = loader.getController();
+
+            // Pass this controller instance to the summary controller
+            summaryController.setGameController(this);
+
+            Stage currentGameStage = (Stage) gamePane.getScene().getWindow(); // Get the game stage
+            summaryController.setGameStage(currentGameStage); // Set the stage in the summary controller
+            
+            // Prepare data for summary
+            GameStatistics stats = GameStatistics.getInstance();
+            summaryController.displaySummary(
+                stats.getTotalVirusesDefeated(),
+                stats.getFinalScore(),
+                stats.getHighestComboStreak(),
+                stats.getAccuracyPercentage(),
+                stats.getTimePlayed()
+            );
+
+            Stage summaryStage = new Stage();
+            summaryStage.setScene(new Scene(summaryView));
+            summaryStage.setTitle("Game Over");
+            summaryStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace(); // Print the stack trace for debugging
+        }
+    }
+    
+    public void resetGame() {
+        // Reset game statistics
+        currentScore = 0;
+        playerHealth = 100;
+        currentOrbs.clear();
+        isGameOver = false;
+        // Update UI elements
+        updateOrbDisplay();
+        updateHealthBar();
+        scoreLabel.setText(String.valueOf(currentScore));
+        
+        // Reset other game components (e.g., stop any ongoing animations, reset timers)
+        // If you have timers or spawn logic, you may want to stop them or restart them here.
+        	
+        // Restart virus spawning if needed
+        startVirusSpawning();
+    }
+    
+    private void stopGame() {
+        // Set the game over flag
+        isGameOver = true;
+
+        // Stop all ongoing virus spawning
+        for (Timeline timeline : activeTimelines) {
+            timeline.stop();
+        }
+
+        // Remove all active viruses from the game pane
+        for (Node node : new ArrayList<>(gamePane.getChildren())) {
+            if (node instanceof ImageView && isVirusImage((ImageView)node)) {
+                // Remove the virus
+                gamePane.getChildren().remove(node);
+                // Also remove its associated label
+                Label associatedLabel = virusLabelMap.get(node);
+                if (associatedLabel != null) {
+                    gamePane.getChildren().remove(associatedLabel);
+                    virusLabelMap.remove(node); // Remove from the mapping
+                }
+            }
+        }
+
+        // Disable all buttons to prevent further interactions
+        disableButtonFocus(); // This disables all buttons that allow user interaction
+
+        System.out.println("Game has been stopped. All viruses removed.");
     }
 
 }

@@ -16,7 +16,7 @@
       </Label>
       <HBox alignment="CENTER" layoutX="6.0" layoutY="327.0" prefHeight="133.0" prefWidth="1285.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#switchToIntructions" prefHeight="71.0" prefWidth="157.0" text="Instructions">
+            <Button focusTraversable="false" mnemonicParsing="false" onAction="#switchToIntructions" prefHeight="71.0" prefWidth="157.0" text="Instructions">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
@@ -32,7 +32,7 @@
                   <Insets left="100.0" right="100.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="71.0" prefWidth="157.0" text="Highest Score">
+            <Button focusTraversable="false" mnemonicParsing="false" prefHeight="71.0" prefWidth="157.0" text="Highest Score">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
@@ -44,7 +44,7 @@
       </HBox>
       <HBox alignment="CENTER" layoutX="6.0" layoutY="511.0" prefHeight="133.0" prefWidth="1280.0">
          <children>
-            <Button mnemonicParsing="false" prefHeight="71.0" prefWidth="157.0" text="Credits">
+            <Button focusTraversable="false" mnemonicParsing="false" prefHeight="71.0" prefWidth="157.0" text="Credits">
                <font>
                   <Font size="18.0" />
                </font>
