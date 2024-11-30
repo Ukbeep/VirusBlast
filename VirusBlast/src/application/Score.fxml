@@ -1,8 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.scene.layout.AnchorPane?>
-
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="application.ScoreController">
+    <children>
+        <Label fx:id="totalVirusesDefeatedLabel" layoutX="20" layoutY="50" text="Total Viruses Defeated: " />
+        <Label fx:id="finalScoreLabel" layoutX="20" layoutY="100" text="Final Score: " />
+        <Label fx:id="highestComboStreakLabel" layoutX="20" layoutY="150" text="Highest Combo Streak: " />
+        <Label fx:id="accuracyPercentageLabel" layoutX="20" layoutY="200" text="Accuracy Percentage: " />
+        <Label fx:id="timePlayedLabel" layoutX="20" layoutY="250" text="Time Played: " />
+        <Button fx:id="closeButton" layoutX="20" layoutY="300" text="Close" onAction="#handleCloseButton" />
+    </children>
 </AnchorPane>
-

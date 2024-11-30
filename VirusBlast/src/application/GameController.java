@@ -20,7 +20,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +30,7 @@ import java.util.Map;
 import java.util.Random;
 
 public class GameController {
-
+	
     @FXML
     private Pane gamePane;
 
@@ -106,11 +105,20 @@ public class GameController {
     private final Map<String, Double> maxSpawnRates = new HashMap<>();
     private final Map<String, Double> initialFallSpeeds = new HashMap<>();
     private final Map<String, Double> maxFallSpeeds = new HashMap<>();
+    private Timeline timeTracker;
     
     @FXML
     private Label scoreLabel;
     private int currentScore = 0;
-
+    private int highestComboStreak = 0; // Track highest combo
+    private int currentCombo = 0; // Track current combo
+    private int totalActions = 0; // Total attempts to fire orbs
+    private int successfulActions = 0; // Successful virus destructions
+    private long startTime; // Store start time
+    private long endTime; // Store end time
+    private long totalPlayTime = 0;
+    
+    
     // Define point values for different virus types
     private final Map<String, Integer> virusPointValues = Map.of(
         "basic", 10,
@@ -122,11 +130,28 @@ public class GameController {
         "boss", 100
     );
    
-    private int playerHealth = 100; // Player's health
+    private int playerHealth = 4; // Player's health
     private boolean isGameOver = false; // Track if the game is over
 
     public void initialize() {
-    	GameStatistics.getInstance().loadStatistics();
+    	// Start the game timer immediately
+        GameStatistics.getInstance().startTimer();
+        
+        // Create a Timeline to periodically update total play time
+        Timeline timeUpdateTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            if (!isGameOver) {
+                // This will ensure the time is continuously updated
+                long currentPlayTime = GameStatistics.getInstance().getTimePlayed();
+                System.out.println("Current Play Time: " + currentPlayTime + " seconds");
+            }
+        }));
+        timeUpdateTimeline.setCycleCount(Timeline.INDEFINITE);
+        timeUpdateTimeline.play();
+    	
+    	setupTimeTracking();
+        timeTracker.setCycleCount(Timeline.INDEFINITE);
+        timeTracker.play();
+    	//GameStatistics.getInstance().loadStatistics();
         gamePane.setFocusTraversable(true);
         gamePane.requestFocus();
         setupVirusConfigurations();
@@ -576,7 +601,8 @@ private void handleOrbClick(ActionEvent event) {
     @FXML
     private void fireOrbs() {
         System.out.println("FireOrbs method called. Current orbs: " + currentOrbs);
-
+        System.out.println("Time Played: " + GameStatistics.getInstance().getTimePlayed() + " seconds");
+        totalActions++;
         if (currentOrbs.isEmpty()) {
             System.out.println("No orbs to fire!");
             return;
@@ -603,7 +629,6 @@ private void handleOrbClick(ActionEvent event) {
                         destroyedVirusType = virusType;
                         
                         // Find the associated label using the mapping
-                        // Find the associated label using the mapping
                         associatedLabel = virusLabelMap.get(virus);
                     }
                 }
@@ -612,11 +637,13 @@ private void handleOrbClick(ActionEvent event) {
 
         // If we found a virus to destroy
         if (lowestVirus != null) {
+        	successfulActions++;
             // Add points based on virus type
             int pointsEarned = virusPointValues.getOrDefault(destroyedVirusType, 10);
             currentScore += pointsEarned;
             updateScoreLabel();
-
+            System.out.println("Total viruses defeated after increment: " + GameStatistics.getInstance().getTotalVirusesDefeated());
+            GameStatistics.getInstance().incrementTotalVirusesDefeated();
             addHitAnimation(lowestVirus);
             gamePane.getChildren().remove(lowestVirus);
             
@@ -631,6 +658,8 @@ private void handleOrbClick(ActionEvent event) {
         // Clear orbs after firing
         currentOrbs.clear();
         updateOrbDisplay();
+        updateAccuracy();
+        updateCombo();
     }
     
     private void updateScoreLabel() {
@@ -819,6 +848,11 @@ private void handleOrbClick(ActionEvent event) {
     
     private void displayPostGameSummary() {
         try {
+            GameStatistics stats = GameStatistics.getInstance();
+            stats.setFinalScore(currentScore); // Update the final score
+            //stats.incrementTotalVirusesDefeated(); // Increment the total viruses defeated
+            // You may want to update other statistics as well, such as highest combo streak, accuracy, etc.
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("SummaryView.fxml"));
             Parent summaryView = loader.load();
             SummaryController summaryController = loader.getController();
@@ -830,7 +864,6 @@ private void handleOrbClick(ActionEvent event) {
             summaryController.setGameStage(currentGameStage); // Set the stage in the summary controller
             
             // Prepare data for summary
-            GameStatistics stats = GameStatistics.getInstance();
             summaryController.displaySummary(
                 stats.getTotalVirusesDefeated(),
                 stats.getFinalScore(),
@@ -858,8 +891,18 @@ private void handleOrbClick(ActionEvent event) {
         // Update UI elements
         updateOrbDisplay();
         updateHealthBar();
+        if (timeTracker != null) {
+            timeTracker.stop();
+        }
+
+        // Reset game statistics time
+        GameStatistics.getInstance().resetTimer();
+        GameStatistics.getInstance().startTimer();
+        // Restart time tracking
+        setupTimeTracking();
+        totalPlayTime = 0;
         scoreLabel.setText(String.valueOf(currentScore));
-        
+        GameStatistics.getInstance().reset();
         // Reset other game components (e.g., stop any ongoing animations, reset timers)
         // If you have timers or spawn logic, you may want to stop them or restart them here.
         	
@@ -870,7 +913,12 @@ private void handleOrbClick(ActionEvent event) {
     private void stopGame() {
         // Set the game over flag
         isGameOver = true;
+        if (timeTracker != null) {
+            timeTracker.stop();
+        }
 
+        // Stop the timer in GameStatistics
+        GameStatistics.getInstance().stopTimer();
         // Stop all ongoing virus spawning
         for (Timeline timeline : activeTimelines) {
             timeline.stop();
@@ -894,6 +942,34 @@ private void handleOrbClick(ActionEvent event) {
         disableButtonFocus(); // This disables all buttons that allow user interaction
 
         System.out.println("Game has been stopped. All viruses removed.");
+    }
+    
+    private void updateCombo() {
+        currentCombo++;
+        if (currentCombo > highestComboStreak) {
+            highestComboStreak = currentCombo;
+            GameStatistics.getInstance().setHighestComboStreak(highestComboStreak);
+        }
+    }
+    
+    private void updateAccuracy() {
+        double accuracy = (double) successfulActions / totalActions * 100;
+        GameStatistics.getInstance().setAccuracyPercentage(accuracy);
+    }
+    
+    private void setupTimeTracking() {
+        GameStatistics.getInstance().startTimer(); // Start the timer when game begins
+
+        // Optional: Create a periodic timer to update play time
+        timeTracker = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            if (!isGameOver) {
+                long currentPlayTime = GameStatistics.getInstance().getTimePlayed();
+                // Optionally update a time display label
+                // timeLabel.setText("Time: " + currentPlayTime + " seconds");
+            }
+        }));
+        timeTracker.setCycleCount(Timeline.INDEFINITE);
+        timeTracker.play();
     }
 
 }
