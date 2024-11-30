@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
@@ -15,52 +13,52 @@
    <children>
       <HBox alignment="CENTER" layoutX="-1.0" layoutY="592.0" prefHeight="60.0" prefWidth="1282.0" spacing="60.0">
          <children>
-            <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="orb11" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@resources/img/Orbs/acidOrb.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="orb22" fitHeight="60.0" fitWidth="60.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@resources/img/Orbs/baseOrb.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="150.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="orb33" fitHeight="60.0" fitWidth="60.0" layoutX="150.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@resources/img/Orbs/bioOrb.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="290.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="orb44" fitHeight="60.0" fitWidth="60.0" layoutX="290.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@resources/img/Orbs/chemicalOrb.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="990.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="orb55" fitHeight="60.0" fitWidth="60.0" layoutX="990.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@resources/img/Orbs/heatOrb.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="570.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="orb66" fitHeight="60.0" fitWidth="60.0" layoutX="570.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@resources/img/Orbs/crystalOrb.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="710.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="orb77" fitHeight="60.0" fitWidth="60.0" layoutX="710.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@resources/img/Orbs/earthOrb.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="850.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="orb88" fitHeight="60.0" fitWidth="60.0" layoutX="850.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@resources/img/Orbs/electricOrb.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="430.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="orb99" fitHeight="60.0" fitWidth="60.0" layoutX="430.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@resources/img/Orbs/coldOrb.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="1130.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="orb100" fitHeight="60.0" fitWidth="60.0" layoutX="1130.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@resources/img/Orbs/metalOrb.png" />
                </image>
@@ -81,90 +79,6 @@
             <Button fx:id="semicolonButton" alignment="CENTER" contentDisplay="CENTER" layoutX="832.0" layoutY="20.0" minWidth="60.0" mnemonicParsing="false" onAction="#handleOrbClick" text=";" textAlignment="CENTER" />
          </children>
       </HBox>
-      <VBox layoutX="620.0" layoutY="475.0" prefHeight="200.0" prefWidth="42.0">
-         <children>
-            <ImageView fx:id="orb1" fitHeight="60.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false">
-               <image>
-                  <Image url="@resources/img/Orbs/bioOrb.png" />
-               </image>
-               <VBox.margin>
-                  <Insets top="-20.0" />
-               </VBox.margin>
-            </ImageView>
-            <ImageView fx:id="orb2" fitHeight="60.0" fitWidth="40.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" visible="false">
-               <image>
-                  <Image url="@resources/img/Orbs/bioOrb.png" />
-               </image>
-               <VBox.margin>
-                  <Insets top="-20.0" />
-               </VBox.margin>
-            </ImageView>
-            <ImageView fx:id="orb3" fitHeight="60.0" fitWidth="40.0" layoutX="10.0" layoutY="70.0" pickOnBounds="true" preserveRatio="true" visible="false">
-               <image>
-                  <Image url="@resources/img/Orbs/bioOrb.png" />
-               </image>
-               <VBox.margin>
-                  <Insets top="-20.0" />
-               </VBox.margin>
-            </ImageView>
-            <ImageView fx:id="orb4" fitHeight="60.0" fitWidth="40.0" layoutX="10.0" layoutY="70.0" pickOnBounds="true" preserveRatio="true" visible="false">
-               <image>
-                  <Image url="@resources/img/Orbs/bioOrb.png" />
-               </image>
-               <VBox.margin>
-                  <Insets top="-20.0" />
-               </VBox.margin>
-            </ImageView>
-            <ImageView fx:id="orb5" fitHeight="60.0" fitWidth="40.0" layoutX="10.0" layoutY="130.0" pickOnBounds="true" preserveRatio="true" visible="false">
-               <image>
-                  <Image url="@resources/img/Orbs/bioOrb.png" />
-               </image>
-               <VBox.margin>
-                  <Insets top="-20.0" />
-               </VBox.margin>
-            </ImageView>
-            <ImageView fx:id="orb6" fitHeight="60.0" fitWidth="40.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" visible="false">
-               <image>
-                  <Image url="@resources/img/Orbs/bioOrb.png" />
-               </image>
-               <VBox.margin>
-                  <Insets top="-20.0" />
-               </VBox.margin>
-            </ImageView>
-            <ImageView fx:id="orb7" fitHeight="60.0" fitWidth="40.0" layoutX="10.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" visible="false">
-               <image>
-                  <Image url="@resources/img/Orbs/bioOrb.png" />
-               </image>
-               <VBox.margin>
-                  <Insets top="-20.0" />
-               </VBox.margin>
-            </ImageView>
-            <ImageView fx:id="orb8" fitHeight="60.0" fitWidth="40.0" layoutX="10.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true" visible="false">
-               <image>
-                  <Image url="@resources/img/Orbs/bioOrb.png" />
-               </image>
-               <VBox.margin>
-                  <Insets top="-20.0" />
-               </VBox.margin>
-            </ImageView>
-            <ImageView fx:id="orb9" fitHeight="60.0" fitWidth="40.0" layoutX="10.0" layoutY="40.0" pickOnBounds="true" preserveRatio="true" visible="false">
-               <image>
-                  <Image url="@resources/img/Orbs/bioOrb.png" />
-               </image>
-               <VBox.margin>
-                  <Insets top="-20.0" />
-               </VBox.margin>
-            </ImageView>
-            <ImageView fx:id="orb10" fitHeight="60.0" fitWidth="40.0" layoutX="10.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" visible="false">
-               <image>
-                  <Image url="@resources/img/Orbs/bioOrb.png" />
-               </image>
-               <VBox.margin>
-                  <Insets top="-20.0" />
-               </VBox.margin>
-            </ImageView>
-         </children>
-      </VBox>
       <HBox layoutX="-1.0" layoutY="680.0" prefHeight="44.0" prefWidth="1280.0">
          <children>
             <Button fx:id="resetButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#resetOrb" prefHeight="44.0" prefWidth="643.0" text="Reset">
@@ -179,7 +93,7 @@
             </Button>
          </children>
       </HBox>
-      <Label layoutX="61.0" layoutY="39.0" text="Score:   " textFill="WHITE">
+      <Label layoutX="59.0" layoutY="41.0" text="Score:   " textFill="WHITE">
          <font>
             <Font size="20.0" />
          </font>
@@ -190,5 +104,59 @@
          </font>
       </Label>
       <Rectangle fx:id="healthBar" arcHeight="5.0" arcWidth="5.0" fill="#d70000" height="40.0" layoutX="-1.0" layoutY="722.0" stroke="BLACK" strokeType="INSIDE" width="1282.0" />
+      <HBox alignment="CENTER" layoutX="429.0" layoutY="539.0" prefHeight="45.0" prefWidth="420.0">
+         <children>
+            <ImageView fx:id="orb1" fitHeight="60.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@resources/img/Orbs/bioOrb.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="orb2" fitHeight="60.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@resources/img/Orbs/bioOrb.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="orb3" fitHeight="60.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@resources/img/Orbs/bioOrb.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="orb4" fitHeight="60.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@resources/img/Orbs/bioOrb.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="orb5" fitHeight="60.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@resources/img/Orbs/bioOrb.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="orb6" fitHeight="60.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@resources/img/Orbs/bioOrb.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="orb7" fitHeight="60.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@resources/img/Orbs/bioOrb.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="orb8" fitHeight="60.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@resources/img/Orbs/bioOrb.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="orb9" fitHeight="60.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@resources/img/Orbs/bioOrb.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="orb10" fitHeight="60.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@resources/img/Orbs/bioOrb.png" />
+               </image>
+            </ImageView>
+         </children>
+      </HBox>
    </children>
 </Pane>

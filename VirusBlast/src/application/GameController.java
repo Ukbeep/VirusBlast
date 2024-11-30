@@ -1,7 +1,10 @@
 package application;
 
 import javafx.animation.KeyFrame;
+import javafx.animation.RotateTransition;
+import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,32 +27,17 @@ import java.util.Random;
 
 public class GameController {
 
-	
-	
     @FXML
     private Pane gamePane;
 
     @FXML
-    private ImageView orb1; // First orb
-    @FXML
-    private ImageView orb2; // Second orb
-    @FXML
-    private ImageView orb3; // Third orb
-    @FXML
-    private ImageView orb4; // Fourth orb
-    @FXML
-    private ImageView orb5; // Fifth orb
-    @FXML
-    private ImageView orb6; // First orb
-    @FXML
-    private ImageView orb7; // Second orb
-    @FXML
-    private ImageView orb8; // Third orb
-    @FXML
-    private ImageView orb9; // Fourth orb
-    @FXML
-    private ImageView orb10; // Fifth orb
+    private ImageView orb1, orb2, orb3, orb4, orb5, orb6,
+    				  orb7, orb8, orb9, orb10;
 
+    @FXML
+    private ImageView orb11, orb22, orb33, orb44, orb55, orb66,
+	  orb77, orb88, orb99, orb100;
+    
     // Buttons for orb selection
     @FXML
     private Button aButton, sButton, dButton, fButton, gButton, 
@@ -86,10 +74,10 @@ public class GameController {
     	    "basic", List.of("heat"),
     	    "double_orb", List.of("acid", "heat"),
     	    "triple_orb", List.of("heat", "electric", "metal"),
-    	    "partial_immunity", List.of("cold", "bio"),
-    	    "tank", List.of("acid", "chemical", "heat", "metal", "electric"),  
+    	    "partial_immunity", List.of("cold", "bio", "cold", "bio"),
+    	    "tank", List.of("acid", "chemical", "heat", "metal", "electric", "base"),  
     	    "fast", List.of("cold", "electric"),
-    	    "boss", List.of("heat", "electric", "cold", "bio", "chemical")
+    	    "boss", List.of("heat", "electric", "cold", "bio", "chemical", "base", "acid", "heat", "heat", "electric")
     );
     
     //For label
@@ -97,10 +85,10 @@ public class GameController {
     		   "basic", List.of("G"),
     		   "double_orb", List.of("A", "G"),
     		   "triple_orb", List.of("G", "K", ";"),
-    		   "partial_immunity", List.of("L", "D"),
-    		   "tank", List.of("A", "F", "G", ";", "K"),
+    		   "partial_immunity", List.of("L", "D", "L", "D"),
+    		   "tank", List.of("A", "F", "G", ";", "K", "S"),
     		   "fast", List.of("L", "K"),
-    		   "boss", List.of("G", "K", "L", "D", "F")
+    		   "boss", List.of("G", "K", "L", "D", "F", "S", "A", "G", "G", "K")
     		);
     
     final Map<String, String> virusImages = new HashMap<>();
@@ -158,37 +146,48 @@ public class GameController {
         gamePane.setOnKeyPressed(event -> {
             // Consume the event to prevent default button focus
             event.consume();
-
+            ImageView orbToAnimate = null;
+            
             switch (event.getCode()) {
                 case A:
                     addOrb("acid");
+                    orbToAnimate = orb11;
                     break;
                 case S:
                     addOrb("base");
+                    orbToAnimate = orb22;
                     break;
                 case D:
                     addOrb("bio");
+                    orbToAnimate = orb33;
                     break;
                 case F:
                     addOrb("chemical");
+                    orbToAnimate = orb44;
                     break;
                 case G:
                 	addOrb("heat"); 
+                	orbToAnimate = orb55;
                     break;
                 case H:
                     addOrb("crystal");
+                    orbToAnimate = orb66;
                     break;
                 case J:
                     addOrb("earth");
+                    orbToAnimate = orb77;
                     break;
                 case K:
                     addOrb("electric");
+                    orbToAnimate = orb88;
                     break;
                 case L:
                 	addOrb("cold");
+                	orbToAnimate = orb99;
                     break;
                 case SEMICOLON:
                     addOrb("metal");
+                    orbToAnimate = orb100;
                     break;
                 case SPACE:
                     fireOrbs();
@@ -198,6 +197,10 @@ public class GameController {
                     break;
                 default:
                     break;
+            }
+            // Animate the orb if one was found
+            if (orbToAnimate != null) {
+                animateOrb(orbToAnimate);
             }
         });
 
@@ -225,38 +228,48 @@ private void handleOrbClick(ActionEvent event) {
     // Get the button that was clicked
     Button clickedButton = (Button) event.getSource();
     String buttonText = clickedButton.getText();
-
+    ImageView orbToAnimate = null;
     // Map button text to orb types and add to the stack
     switch (buttonText) {
         case "A":
             addOrb("acid"); // Black Orb
+            orbToAnimate = orb11;
             break;
         case "S":
             addOrb("base"); // White Orb
+            orbToAnimate = orb22;
             break;
         case "D":
             addOrb("bio"); // Green Orb
+            orbToAnimate = orb33;
             break;
         case "F":
             addOrb("chemical"); // Purple Orb
+            orbToAnimate = orb44;
             break;
         case "G":
         	addOrb("heat"); // Red Orb
+        	orbToAnimate = orb55;
             break;
         case "H":
             addOrb("crystal"); // Pink Orb
+            orbToAnimate = orb66;
             break;
         case "J":
             addOrb("earth"); // brown Orb
+            orbToAnimate = orb77;
             break;
         case "K":
             addOrb("electric"); // Yellow Orb
+            orbToAnimate = orb88;
             break;
         case "L":
         	addOrb("cold");// Blue Orb
+        	orbToAnimate = orb99;
             break;
         case ";":
             addOrb("metal"); // orange Orb
+            orbToAnimate = orb100;
             break;   	
         case "SPACE":
         	fireOrbs();
@@ -265,7 +278,10 @@ private void handleOrbClick(ActionEvent event) {
         	resetOrb();
         	break;
         default:
-            System.out.println("Invalid button pressed.");
+            System.out.println("Invalid button pressed.");    
+    }
+    if (orbToAnimate != null) {
+        animateOrb(orbToAnimate);
     }
 }
 
@@ -749,5 +765,42 @@ private void handleOrbClick(ActionEvent event) {
         removeAnimation.play();
     }
     
+    private void animateOrb(ImageView orb) {
+        // Check if the orb is already animating
+        if (orb.getUserData() != null && (Boolean) orb.getUserData()) {
+            return; // Prevent overlapping animations
+        }
+
+        // Store the original position
+        double originalY = orb.getY();
+        
+        // Set user data to indicate that the orb is animating
+        orb.setUserData(true);
+
+        // Create a TranslateTransition to move the orb up
+        TranslateTransition translateUp = new TranslateTransition(Duration.millis(200), orb);
+        translateUp.setByY(-15); // Move up by 50 pixels
+
+        // Create a RotateTransition to rotate the orb
+        RotateTransition rotate = new RotateTransition(Duration.millis(200), orb);
+        rotate.setFromAngle(0);
+        rotate.setToAngle(360); // Rotate 360 degrees
+
+        // Create a TranslateTransition to move the orb back down
+        TranslateTransition translateDown = new TranslateTransition(Duration.millis(200), orb);
+        translateDown.setByY(15); // Move down by 50 pixels
+
+        // Create a SequentialTransition to play the animations one after the other
+        SequentialTransition animation = new SequentialTransition(translateUp, rotate, translateDown);
+
+        // Set onFinished to reset the Y position and user data
+        animation.setOnFinished(event -> {
+            orb.setY(originalY); // Reset to original position
+            orb.setUserData(false); // Reset user data to indicate that the animation is done
+        });
+
+        // Play the animation
+        animation.play();
+    }
 
 }

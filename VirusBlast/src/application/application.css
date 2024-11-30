@@ -9,4 +9,11 @@
     -fx-font-size: 14px;
     -fx-text-fill: white;
 }
+
+#scoreLabel {
+    -fx-font-family: 'Orbitron';
+    -fx-font-size: 24px;
+    -fx-text-fill: gold;
+}
+
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
