@@ -32,7 +32,7 @@
                   <Insets left="100.0" right="100.0" />
                </HBox.margin>
             </Button>
-            <Button focusTraversable="false" mnemonicParsing="false" prefHeight="71.0" prefWidth="157.0" text="Highest Score">
+            <Button fx:id="ScoreController" focusTraversable="false" mnemonicParsing="false" onAction="#switchToScore" prefHeight="71.0" prefWidth="157.0" text="Highest Score">
                <HBox.margin>
                   <Insets />
                </HBox.margin>

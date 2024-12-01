@@ -8,89 +8,167 @@ import java.util.Properties;
 
 public class GameStatistics {
     private static GameStatistics instance;
-    private int totalVirusesDefeated;
-    private int finalScore;
+    // Highest scores
+    // Highest scores
+    private int highestTotalVirusesDefeated;
     private int highestComboStreak;
-    private double accuracyPercentage;
-    private long startTime;
-    private long totalPlayTime;
-    private boolean isGameRunning = false;
-    
-    private GameStatistics() {
-        // Initialize to zero
-        totalVirusesDefeated = 0;
-        finalScore = 0;
-        highestComboStreak = 0;
-        accuracyPercentage = 0.0;
-        totalPlayTime = 0;
+    private double highestAccuracyPercentage;
+    private long highestTotalPlayTime;
+    private int highestFinalScore; // New field for highest final score
 
-        // Load statistics from the file
-        //loadStatistics();
+    // Current game statistics
+    private int currentTotalVirusesDefeated;
+    private int currentFinalScore;
+    private int currentComboStreak;
+    private double currentAccuracyPercentage;
+    private long currentTotalPlayTime; long startTime;
+    private long totalPlayTime;
+    
+    private boolean isGameRunning = false;
+    private static final String STATISTICS_FILE = "virus_blast_statistics.properties";
+    
+    GameStatistics() {
+        // Initialize to zero
+    	currentTotalVirusesDefeated = 0;
+    	currentFinalScore = 0;
+    	currentComboStreak = 0;
+        currentAccuracyPercentage = 0.0;
+        currentTotalPlayTime = 0;
     }
 
     public static GameStatistics getInstance() {
         if (instance == null) {
             instance = new GameStatistics();
+            instance.loadStatistics(); // Load existing statistics on instantiation
         }
         return instance;
     }
+    
+    // Getters and setters for current statistics
+    public void setCurrentTotalVirusesDefeated(int count) { this.currentTotalVirusesDefeated = count; }
+    public void setCurrentComboStreak(int streak) { this.currentComboStreak = streak; }
+    public void setCurrentAccuracyPercentage(double accuracy) { this.currentAccuracyPercentage = accuracy; }
+    public void setCurrentTotalPlayTime(long time) { this.currentTotalPlayTime = time; }
+    
+ // Method to save statistics
+    public void saveStatistics() {
+        Properties properties = new Properties();
+        File file = new File(STATISTICS_FILE);
 
+        // Load existing data if the file exists
+        if (file.exists()) {
+            try (FileInputStream in = new FileInputStream(file)) {
+                properties.load(in);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
-//    public void loadStatistics() {
-//        Properties properties = new Properties();
-//        File statsFile = new File("game_statistics.properties");
-//
-//        if (!statsFile.exists()) {
-//            try {
-//                // Create a new file if it does not exist
-//                statsFile.createNewFile();
-//
-//                // Set default properties
-//                properties.setProperty("TotalVirusesDefeated", "0");
-//                properties.setProperty("FinalScore", "0");
-//                properties.setProperty("HighestComboStreak", "0");
-//                properties.setProperty("AccuracyPercentage", "0");
-//                properties.setProperty("TimePlayed", "0");
-//
-//                // Save the default properties
-//                //saveStatistics(properties);
-//
-//            } catch (IOException e) {
-//                System.err.println("Failed to create properties file: " + e.getMessage());
-//            }
-//        } else {
-//            // Load properties from the existing file
-//            try (FileInputStream inputStream = new FileInputStream(statsFile)) {
-//                properties.load(inputStream);
-//
-//                // Parse properties
-//                totalVirusesDefeated = Integer.parseInt(properties.getProperty("TotalVirusesDefeated", "0"));
-//                finalScore = Integer.parseInt(properties.getProperty("FinalScore", "0"));
-//                highestComboStreak = Integer.parseInt(properties.getProperty("HighestComboStreak", "0"));
-//                accuracyPercentage = Double.parseDouble(properties.getProperty("AccuracyPercentage", "0"));
-//                timePlayed = Long.parseLong(properties.getProperty("TimePlayed", "0"));
-//
-//            } catch (IOException e) {
-//                System.err.println("Error loading statistics: " + e.getMessage());
-//            } catch (NumberFormatException e) {
-//                System.err.println("Error parsing statistics: " + e.getMessage());
-//            }
-//        }
-//    }
+        // Check current highest scores
+        highestTotalVirusesDefeated = Integer.parseInt(properties.getProperty("totalVirusesDefeated", "0"));
+        highestComboStreak = Integer.parseInt(properties.getProperty("comboStreak", "0"));
+        highestAccuracyPercentage = Double.parseDouble(properties.getProperty("accuracyPercentage", "0.0"));
+        highestTotalPlayTime = Long.parseLong(properties.getProperty("totalPlayTime", "0"));
+        highestFinalScore = Integer.parseInt(properties.getProperty("highestFinalScore", "0")); // Load previous highest final score
 
-	 
-//	 * public void saveStatistics(Properties properties) { try (FileOutputStream
-//	 * outputStream = new FileOutputStream("game_statistics.properties")) {
-//	 * properties.setProperty("TotalVirusesDefeated",
-//	 * String.valueOf(totalVirusesDefeated)); properties.setProperty("FinalScore",
-//	 * String.valueOf(finalScore)); properties.setProperty("HighestComboStreak",
-//	 * String.valueOf(highestComboStreak));
-//	 * properties.setProperty("AccuracyPercentage",
-//	 * String.valueOf(accuracyPercentage)); properties.setProperty("TimePlayed",
-//	 * String.valueOf(timePlayed)); properties.store(outputStream,
-//	 * "Game Statistics"); } catch (IOException e) { e.printStackTrace(); } }
-//	 */
+        // Calculate the current final score based on game metrics
+        int currentFinalScore = getFinalScore();
 
+        // Update highest scores if current scores exceed them
+        if (currentTotalVirusesDefeated > highestTotalVirusesDefeated) {
+            highestTotalVirusesDefeated = currentTotalVirusesDefeated;
+            properties.setProperty("totalVirusesDefeated", String.valueOf(highestTotalVirusesDefeated));
+        }
+
+        if (currentComboStreak > highestComboStreak) {
+            highestComboStreak = currentComboStreak;
+            properties.setProperty("comboStreak", String.valueOf(highestComboStreak));
+        }
+
+        if (currentAccuracyPercentage > highestAccuracyPercentage) {
+            highestAccuracyPercentage = currentAccuracyPercentage;
+            properties.setProperty("accuracyPercentage", String.valueOf(highestAccuracyPercentage));
+        }
+
+        if (currentTotalPlayTime > highestTotalPlayTime) {
+            highestTotalPlayTime = currentTotalPlayTime;
+            properties.setProperty("totalPlayTime", String.valueOf(highestTotalPlayTime));
+        }
+
+        // Check and update the highest final score
+        if (currentFinalScore > highestFinalScore) {
+            highestFinalScore = currentFinalScore;
+            properties.setProperty("highestFinalScore", String.valueOf(highestFinalScore));
+        }
+
+        // Save updated properties back to file
+        try (FileOutputStream out = new FileOutputStream(file)) {
+            properties.store(out, "Game Statistics");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    
+    public void loadStatistics() {
+        File file = new File(STATISTICS_FILE);
+        Properties properties = new Properties();
+
+        try {
+            // Ensure the file exists, creating it if necessary
+            if (!file.exists()) {
+                // Use the current working directory explicitly
+                file = new File(System.getProperty("user.dir"), STATISTICS_FILE);
+                
+                // Ensure the parent directory exists
+                if (file.getParentFile() != null) {
+                    file.getParentFile().mkdirs();
+                }
+                
+                // Create the file
+                file.createNewFile();
+                
+                // Set default values
+                properties.setProperty("totalVirusesDefeated", "0");
+                properties.setProperty("comboStreak", "0");
+                properties.setProperty("accuracyPercentage", "0.0");
+                properties.setProperty("totalPlayTime", "0");
+                properties.setProperty("highestFinalScore", "0");
+                properties.setProperty("finalScore", "0");
+                properties.setProperty("timePlayed", "0");
+
+                // Save the properties
+                try (FileOutputStream out = new FileOutputStream(file)) {
+                    properties.store(out, "Game Statistics - Initial Configuration");
+                }
+            }
+
+            // Now read the properties from the file
+            try (FileInputStream input = new FileInputStream(file)) {
+                properties.load(input);
+                
+                // Load values into class fields
+                highestTotalVirusesDefeated = Integer.parseInt(properties.getProperty("totalVirusesDefeated", "0"));
+                highestComboStreak = Integer.parseInt(properties.getProperty("comboStreak", "0"));
+                highestAccuracyPercentage = Double.parseDouble(properties.getProperty("accuracyPercentage", "0.0"));
+                highestTotalPlayTime = Long.parseLong(properties.getProperty("totalPlayTime", "0"));
+                highestFinalScore = Integer.parseInt(properties.getProperty("highestFinalScore", "0"));
+
+                currentTotalVirusesDefeated = Integer.parseInt(properties.getProperty("totalVirusesDefeated", "0"));
+                currentFinalScore = Integer.parseInt(properties.getProperty("finalScore", "0"));
+                currentComboStreak = Integer.parseInt(properties.getProperty("comboStreak", "0"));
+                currentAccuracyPercentage = Double.parseDouble(properties.getProperty("accuracyPercentage", "0.0"));
+                totalPlayTime = Long.parseLong(properties.getProperty("totalPlayTime", "0"));
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Set default values in memory if file reading fails
+            reset();
+        }
+    }
+
+    
     public void startTimer() {
         startTime = System.currentTimeMillis();
         isGameRunning = true;
@@ -110,50 +188,49 @@ public class GameStatistics {
         isGameRunning = false;
     }
     
+//    private int calculateFinalScore() {
+//        return currentTotalVirusesDefeated * 10 + currentComboStreak * 5; // Example calculation
+//    }
+
     // Getters and setters...
     public void setTotalVirusesDefeated(int totalVirusesDefeated) {
-        this.totalVirusesDefeated = totalVirusesDefeated;
-        //saveStatistics(new Properties()); // Update the file whenever you change the statistic
+        this.currentTotalVirusesDefeated = totalVirusesDefeated;
     }
 
     public void incrementTotalVirusesDefeated() {
-        totalVirusesDefeated++;
+    	currentTotalVirusesDefeated++;
     }
     
     public int getTotalVirusesDefeated() {
-        return totalVirusesDefeated;
+        return currentTotalVirusesDefeated;
     }
 
     public void setFinalScore(int finalScore) {
-        this.finalScore = finalScore;
-        //saveStatistics(new Properties());
+        this.currentFinalScore = finalScore;
     }
 
     public int getFinalScore() {
-        return finalScore;
+        return currentFinalScore;
     }
 
-    public void setHighestComboStreak(int highestComboStreak) {
-        this.highestComboStreak = highestComboStreak;
-        //saveStatistics(new Properties());
+    public void setcomboStreak(int comboStreak) {
+        this.currentComboStreak = comboStreak;
     }
 
-    public int getHighestComboStreak() {
-        return highestComboStreak;
+    public int getcomboStreak() {
+        return currentComboStreak;
     }
 
     public void setAccuracyPercentage(double accuracyPercentage) {
-        this.accuracyPercentage = accuracyPercentage;
-        //saveStatistics(new Properties());
+        this.currentAccuracyPercentage = accuracyPercentage;
     }
 
     public double getAccuracyPercentage() {
-        return accuracyPercentage;
+        return currentAccuracyPercentage;
     }
 
     public void setTimePlayed(long totalPlayTime) {
         this.totalPlayTime = totalPlayTime;
-        //saveStatistics(new Properties());
     }
 
     public long getTimePlayed() {
@@ -166,14 +243,23 @@ public class GameStatistics {
 
     public void reset() {
         // Reset all statistics to zero
-        totalVirusesDefeated = 0;
-        finalScore = 0;
-        highestComboStreak = 0;
-        accuracyPercentage = 0.0;
-        totalPlayTime = 0;
-        // Optionally save these reset values to the properties file
-        //saveStatistics(new Properties());
+    	highestTotalVirusesDefeated = 0;
+    	highestFinalScore = 0;
+    	highestComboStreak = 0;
+    	highestAccuracyPercentage = 0.0;
+    	highestTotalPlayTime = 0;
+        System.out.println("Reset....");
+        
+    	currentTotalVirusesDefeated = 0;
+    	currentFinalScore = 0;
+    	currentComboStreak = 0;
+        currentAccuracyPercentage = 0.0;
+        currentTotalPlayTime = 0;
     }
     
-    
+    public int getHighestTotalVirusesDefeated() { return highestTotalVirusesDefeated; }
+    public int getHighestComboStreak() { return highestComboStreak; }
+    public double getHighestAccuracyPercentage() { return highestAccuracyPercentage; }
+    public long getHighestTotalPlayTime() { return highestTotalPlayTime; }
+    public int getHighestFinalScore() { return highestFinalScore; }
 }

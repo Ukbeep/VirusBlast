@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Random;
 
 public class GameController {
@@ -59,7 +60,7 @@ public class GameController {
     
     @FXML
     private Rectangle healthBar;
-    
+  	
     private final Map<String, Integer> virusDamageValues = Map.of(
             "basic", 4,
             "double_orb", 6,	
@@ -110,13 +111,13 @@ public class GameController {
     @FXML
     private Label scoreLabel;
     private int currentScore = 0;
-    private int highestComboStreak = 0; // Track highest combo
+    private int comboStreak = 0; // Track highest combo
     private int currentCombo = 0; // Track current combo
     private int totalActions = 0; // Total attempts to fire orbs
     private int successfulActions = 0; // Successful virus destructions
     private long startTime; // Store start time
     private long endTime; // Store end time
-    private long totalPlayTime = 0;
+    private long timePlayed = 0;
     
     
     // Define point values for different virus types
@@ -135,8 +136,8 @@ public class GameController {
 
     public void initialize() {
     	// Start the game timer immediately
+    	//displayImages();
         GameStatistics.getInstance().startTimer();
-        
         // Create a Timeline to periodically update total play time
         Timeline timeUpdateTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             if (!isGameOver) {
@@ -151,7 +152,6 @@ public class GameController {
     	setupTimeTracking();
         timeTracker.setCycleCount(Timeline.INDEFINITE);
         timeTracker.play();
-    	//GameStatistics.getInstance().loadStatistics();
         gamePane.setFocusTraversable(true);
         gamePane.requestFocus();
         setupVirusConfigurations();
@@ -848,34 +848,35 @@ private void handleOrbClick(ActionEvent event) {
     
     private void displayPostGameSummary() {
         try {
-            GameStatistics stats = GameStatistics.getInstance();
-            stats.setFinalScore(currentScore); // Update the final score
-            //stats.incrementTotalVirusesDefeated(); // Increment the total viruses defeated
-            // You may want to update other statistics as well, such as highest combo streak, accuracy, etc.
+            // Prepare current game results
+            int totalVirusesDefeated = GameStatistics.getInstance().getTotalVirusesDefeated();
+            int finalScore = currentScore; // Current score from this game
+            int comboStreak = GameStatistics.getInstance().getcomboStreak();
+            double accuracyPercentage = GameStatistics.getInstance().getAccuracyPercentage();
+            long timePlayed = GameStatistics.getInstance().getTimePlayed();
 
+            // Reset current score for the next game
+            currentScore = 0; // Resetting current score after displaying
+
+            // Save statistics only if current results surpass previous high scores
+            GameStatistics.getInstance().saveStatistics();
+
+            // Create FXMLLoader for the SummaryView
             FXMLLoader loader = new FXMLLoader(getClass().getResource("SummaryView.fxml"));
             Parent summaryView = loader.load();
             SummaryController summaryController = loader.getController();
 
-            // Pass this controller instance to the summary controller
+            // Pass the current game results to the SummaryController
+            summaryController.displaySummary(totalVirusesDefeated, finalScore, comboStreak, accuracyPercentage, timePlayed);
             summaryController.setGameController(this);
-
-            Stage currentGameStage = (Stage) gamePane.getScene().getWindow(); // Get the game stage
-            summaryController.setGameStage(currentGameStage); // Set the stage in the summary controller
             
-            // Prepare data for summary
-            summaryController.displaySummary(
-                stats.getTotalVirusesDefeated(),
-                stats.getFinalScore(),
-                stats.getHighestComboStreak(),
-                stats.getAccuracyPercentage(),
-                stats.getTimePlayed()
-            );
-
+            // Show Summary View
             Stage summaryStage = new Stage();
             summaryStage.setScene(new Scene(summaryView));
             summaryStage.setTitle("Game Over");
             summaryStage.show();
+            
+            summaryController.setGameStage((Stage) gamePane.getScene().getWindow()); // Pass the existing game stage
 
         } catch (IOException e) {
             e.printStackTrace(); // Print the stack trace for debugging
@@ -885,7 +886,7 @@ private void handleOrbClick(ActionEvent event) {
     public void resetGame() {
         // Reset game statistics
         currentScore = 0;
-        playerHealth = 100;
+        playerHealth = 4;
         currentOrbs.clear();
         isGameOver = false;
         // Update UI elements
@@ -900,7 +901,7 @@ private void handleOrbClick(ActionEvent event) {
         GameStatistics.getInstance().startTimer();
         // Restart time tracking
         setupTimeTracking();
-        totalPlayTime = 0;
+        timePlayed = 0;
         scoreLabel.setText(String.valueOf(currentScore));
         GameStatistics.getInstance().reset();
         // Reset other game components (e.g., stop any ongoing animations, reset timers)
@@ -909,6 +910,8 @@ private void handleOrbClick(ActionEvent event) {
         // Restart virus spawning if needed
         startVirusSpawning();
     }
+    
+    
     
     private void stopGame() {
         // Set the game over flag
@@ -923,7 +926,6 @@ private void handleOrbClick(ActionEvent event) {
         for (Timeline timeline : activeTimelines) {
             timeline.stop();
         }
-
         // Remove all active viruses from the game pane
         for (Node node : new ArrayList<>(gamePane.getChildren())) {
             if (node instanceof ImageView && isVirusImage((ImageView)node)) {
@@ -946,9 +948,9 @@ private void handleOrbClick(ActionEvent event) {
     
     private void updateCombo() {
         currentCombo++;
-        if (currentCombo > highestComboStreak) {
-            highestComboStreak = currentCombo;
-            GameStatistics.getInstance().setHighestComboStreak(highestComboStreak);
+        if (currentCombo > comboStreak) {
+        	comboStreak = currentCombo;
+            GameStatistics.getInstance().setcomboStreak(comboStreak);
         }
     }
     
@@ -971,5 +973,51 @@ private void handleOrbClick(ActionEvent event) {
         timeTracker.setCycleCount(Timeline.INDEFINITE);
         timeTracker.play();
     }
+    
+    public void displayImages(){
+    	    // Load images for all ImageView controls
+    	    orb11.setImage(new Image(getClass().getResource("/application/resources/img/Orbs/acidOrb.png").toExternalForm()));
+    	    orb22.setImage(new Image(getClass().getResource("/application/resources/img/Orbs/baseOrb.png").toExternalForm()));
+    	    orb33.setImage(new Image(getClass().getResource("/application/resources/img/Orbs/bioOrb.png").toExternalForm()));
+    	    orb44.setImage(new Image(getClass().getResource("/application/resources/img/Orbs/chemicalOrb.png").toExternalForm()));
+    	    orb55.setImage(new Image(getClass().getResource("/application/resources/img/Orbs/heatOrb.png").toExternalForm()));
+    	    orb66.setImage(new Image(getClass().getResource("/application/resources/img/Orbs/crystalOrb.png").toExternalForm()));
+    	    orb77.setImage(new Image(getClass().getResource("/application/resources/img/Orbs/earthOrb.png").toExternalForm()));
+    	    orb88.setImage(new Image(getClass().getResource("/application/resources/img/Orbs/electricOrb.png").toExternalForm()));
+    	    orb99.setImage(new Image(getClass().getResource("/application/resources/img/Orbs/coldOrb.png").toExternalForm()));
+    	    orb100.setImage(new Image(getClass().getResource("/application/resources/img/Orbs/metalOrb.png").toExternalForm()));
+
+    	    // Optionally load images for hidden orbs (if needed)
+//    	    orb1.setImage(new Image(getClass().getResource("/resources/img/Orbs/bioOrb.png").toExternalForm()));
+//    	    orb2.setImage(new Image(getClass().getResource("/resources/img/Orbs/bioOrb.png").toExternalForm()));
+//    	    orb3.setImage(new Image(getClass().getResource("/resources/img/Orbs/bioOrb.png").toExternalForm()));
+//    	    orb4.setImage(new Image(getClass().getResource("/resources/img/Orbs/bioOrb.png").toExternalForm()));
+//    	    orb5.setImage(new Image(getClass().getResource("/resources/img/Orbs/bioOrb.png").toExternalForm()));
+//    	    orb6.setImage(new Image(getClass().getResource("/resources/img/Orbs/bioOrb.png").toExternalForm()));
+//    	    orb7.setImage(new Image(getClass().getResource("/resources/img/Orbs/bioOrb.png").toExternalForm()));
+//    	    orb8.setImage(new Image(getClass().getResource("/resources/img/Orbs/bioOrb.png").toExternalForm()));
+//    	    orb9.setImage(new Image(getClass().getResource("/resources/img/Orbs/bioOrb.png").toExternalForm()));
+//    	    orb10.setImage(new Image(getClass().getResource("/resources/img/Orbs/bioOrb.png").toExternalForm()));
+    }
+    
+//    @FXML
+//    private void showScoreView() {
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("score.fxml"));
+//            Parent scoreView = loader.load();
+//
+//            // Get the controller and pass the stage
+//            ScoreController scoreController = loader.getController();
+//            Stage scoreStage = new Stage();
+//            scoreStage.setScene(new Scene(scoreView));
+//            scoreStage.setTitle("Game Statistics");
+//            scoreController.setScoreStage(scoreStage); // Set the score stage
+//            scoreController.displayStatistics(); // Display statistics
+//
+//            scoreStage.show();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 }

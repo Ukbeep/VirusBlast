@@ -31,11 +31,17 @@ public class SummaryController {
     private Stage gameStage;
     
     public void displaySummary(int totalVirusesDefeated, int finalScore, int highestComboStreak, double accuracyPercentage, long timePlayed) {
+        // Use the passed parameters instead of retrieving from GameStatistics
         totalVirusesDefeatedLabel.setText("Total Viruses Defeated: " + totalVirusesDefeated);
         finalScoreLabel.setText("Final Score: " + finalScore);
         highestComboStreakLabel.setText("Highest Combo Streak: " + highestComboStreak);
-        accuracyPercentageLabel.setText("Accuracy Percentage: " + String.format("%.2f", accuracyPercentage) + "%");
+        accuracyPercentageLabel.setText("Accuracy: " + String.format("%.2f%%", accuracyPercentage));
         timePlayedLabel.setText("Time Played: " + timePlayed + " seconds");
+
+        // Optional: Save the current game's statistics
+        GameStatistics stats = GameStatistics.getInstance();
+        stats.setFinalScore(finalScore);
+        GameStatistics.getInstance().saveStatistics();
     }
 
     public void setGameController(GameController gameController) {
@@ -70,12 +76,17 @@ public class SummaryController {
             mainMenuStage.setScene(new Scene(mainMenuView));
             mainMenuStage.setTitle("Main Menu");
             mainMenuStage.show();
-
-            Stage currentGameStage = (Stage) gameStage.getScene().getWindow();
-            currentGameStage.close(); // This will close the game stage
             
             Stage currentGameStage2 = (Stage) mainMenuButton.getScene().getWindow();
             currentGameStage2.close(); // This will close the game stage
+            
+            if (gameStage != null) {
+                Stage currentGameStage = (Stage) gameStage.getScene().getWindow();
+                currentGameStage.close(); // This will close the game stage
+            } else {
+                System.out.println("gameStage is null, cannot close.");
+            }
+           
         } catch (IOException e) {
             e.printStackTrace(); // Print stack trace for debugging
         }

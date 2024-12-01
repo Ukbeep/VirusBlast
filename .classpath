@@ -6,6 +6,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry excluding="application/Animations/" kind="src" path="VirusBlast/src"/>
+	<classpathentry excluding="VirusBlast/src/" kind="src" path=""/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
