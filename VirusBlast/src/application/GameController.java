@@ -358,13 +358,13 @@ private void handleOrbClick(ActionEvent event) {
         maxFallSpeeds.clear();
 
         // Assign base spawn rates with initial and max values
-        setupVirusSpawnRate("basic", 2.0, 1.0, 0.5);
-        setupVirusSpawnRate("double_orb", 6.0, 3.0, 1.5);
-        setupVirusSpawnRate("triple_orb", 12.0, 6.0, 3.0);
-        setupVirusSpawnRate("partial_immunity", 10.0, 5.0, 2.5);
-        setupVirusSpawnRate("boss", 20.0, 10.0, 5.0);
-        setupVirusSpawnRate("fast", 5.0, 2.5, 1.0);
-        setupVirusSpawnRate("tank", 13.0, 6.5, 3.0);
+        setupVirusSpawnRate("basic", 4.0, 2.0, 0.5);
+        setupVirusSpawnRate("double_orb", 9.0, 5.0, 3.5);
+        setupVirusSpawnRate("triple_orb", 15.0, 7.0, 4.0);
+        setupVirusSpawnRate("partial_immunity", 14.0, 9.0, 4.6);
+        setupVirusSpawnRate("boss", 40.0, 25.0, 15.0);
+        setupVirusSpawnRate("fast", 7.0, 4.2, 1.0);
+        setupVirusSpawnRate("tank", 13.0, 9.1, 5.0);
 
         // Assign base fall speeds with initial and max values
         //String virusType, double initial, double midPoint, double maximum
@@ -372,7 +372,7 @@ private void handleOrbClick(ActionEvent event) {
         setupVirusFallSpeed("double_orb", 1.5, 3.0, 4.0);
         setupVirusFallSpeed("triple_orb", 1.2, 2.4, 3.5);
         setupVirusFallSpeed("partial_immunity", 1.0, 2.0, 3.0);
-        setupVirusFallSpeed("boss", 0.8, 1.6, 2.5);
+        setupVirusFallSpeed("boss", 0.2, 0.9, 1.8);
         setupVirusFallSpeed("fast", 3.0, 5.0, 6.0);
         setupVirusFallSpeed("tank", 0.5, 1.0, 2.0);
 
