@@ -16,4 +16,70 @@
     -fx-text-fill: gold;
 }
 
+
+.credits-background {
+    -fx-background-color: #f0f0f0;
+    -fx-padding: 20px;
+}
+
+.credits-content {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5);
+    -fx-padding: 30px;
+}
+
+.title {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-fill: #2c3e50;
+}
+
+.section-header {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-fill: #34495e;
+    -fx-margin-bottom: 15px;
+}
+
+.developer-image, .thanks-image {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 5);
+    -fx-background-radius: 50%;
+    -fx-min-width: 150px;
+    -fx-min-height: 150px;
+    -fx-max-width: 150px;
+    -fx-max-height: 150px;
+}
+
+.creator-name, .thanks-name {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-fill: #2c3e50;
+    -fx-margin-top: 10px;
+}
+
+.creator-role, .thanks-role {
+    -fx-font-size: 14px;
+    -fx-fill: #7f8c8d;
+}
+
+.ai-thanks {
+    -fx-font-size: 16px;
+    -fx-fill: #3498db;
+}
+
+.credits-separator {
+    -fx-background-color: #bdc3c7;
+    -fx-min-height: 2px;
+}
+
+.copyright {
+    -fx-font-size: 12px;
+    -fx-fill: #95a5a6;
+}
+
+.copyright-sub {
+    -fx-font-size: 10px;
+    -fx-fill: #bdc3c7;
+}
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */

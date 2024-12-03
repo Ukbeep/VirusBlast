@@ -24,12 +24,12 @@
             <Font size="29.0" />
          </font>
       </Button>
-      <Button focusTraversable="false" layoutX="869.0" layoutY="326.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="157.0" text="Credits">
+      <Button focusTraversable="false" layoutX="869.0" layoutY="326.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="157.0" onAction="#switchToCredits" text="Credits">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button focusTraversable="false" layoutX="265.0" layoutY="331.0" mnemonicParsing="false" onAction="switchToInstructions" prefHeight="71.0" prefWidth="157.0" text="Instructions">
+      <Button focusTraversable="false" layoutX="265.0" layoutY="331.0" mnemonicParsing="false" onAction="#switchToInstructions" prefHeight="71.0" prefWidth="157.0" text="Instructions">
          <font>
             <Font size="18.0" />
          </font>

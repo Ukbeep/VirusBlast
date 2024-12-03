@@ -18,6 +18,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -119,6 +121,7 @@ public class GameController {
     private long totalPlayTime = 0;
     private AudioClip virusDestroySound;
     private AudioClip orbClickSound;
+    private MediaPlayer backgroundMusicPlayer;
     
     // Define point values for different virus types
     private final Map<String, Integer> virusPointValues = Map.of(
@@ -131,13 +134,17 @@ public class GameController {
         "boss", 100
     );
    
-    private int playerHealth = 4; // Player's health
+    private int playerHealth = 0; // Player's health
     private boolean isGameOver = false; // Track if the game is over
 
     public void initialize() {
+    	
+    	setupBackgroundMusic();
     	try {
             virusDestroySound = new AudioClip(getClass().getResource("resources/audio/hitAudio.mp3").toExternalForm());
+            virusDestroySound.setVolume(0.8);
             orbClickSound = new AudioClip(getClass().getResource("resources/audio/orbClickAudio.wav").toExternalForm());
+            orbClickSound.setVolume(0.8);
         } catch (Exception e) {
             System.err.println("Error loading virus destroy sound: " + e.getMessage());
         }
@@ -674,6 +681,20 @@ private void handleOrbClick(ActionEvent event) {
         } else {
             // Failed to destroy a virus - break the combo streak
             breakComboStreak();
+            
+            Label missLabel = new Label("Miss");
+            missLabel.setStyle("-fx-text-fill: red; -fx-font-size: 24px;");
+            missLabel.setLayoutX(gamePane.getWidth() / 2 - 50); // Center horizontally
+            missLabel.setLayoutY(gamePane.getHeight() / 2 - 50); // Center vertically
+            
+            gamePane.getChildren().add(missLabel);
+            
+            // Remove the label after 1 second
+            Timeline removeLabel = new Timeline(new KeyFrame(
+                Duration.seconds(0.5),
+                event -> gamePane.getChildren().remove(missLabel)
+            ));
+            removeLabel.play();
         }
 
         // Clear orbs after firing
@@ -901,7 +922,7 @@ private void handleOrbClick(ActionEvent event) {
     public void resetGame() {
         // Reset game statistics
         currentScore = 0;
-        playerHealth = 4;
+        playerHealth = 0;
         currentOrbs.clear();
         currentCombo = 0; // Reset current combo
         highestComboStreak = 0; // Explicitly reset highest combo streak
@@ -917,6 +938,11 @@ private void handleOrbClick(ActionEvent event) {
         if (timeTracker != null) {
             timeTracker.stop();
             timeTracker = null;
+        }
+        
+        // Restart background music if it was stopped
+        if (backgroundMusicPlayer != null) {
+            backgroundMusicPlayer.play();
         }
 
         // Reset GameStatistics completely
@@ -946,6 +972,10 @@ private void handleOrbClick(ActionEvent event) {
         isGameOver = true;
         if (timeTracker != null) {
             timeTracker.stop();
+        }
+        
+        if (backgroundMusicPlayer != null) {
+            backgroundMusicPlayer.stop();
         }
 
         // Stop the timer in GameStatistics
@@ -1035,6 +1065,18 @@ private void handleOrbClick(ActionEvent event) {
 
         // Ensure the timer in GameStatistics is started
         GameStatistics.getInstance().startTimer();
+    }
+    
+    private void setupBackgroundMusic() {
+        try {
+            Media backgroundMusic = new Media(getClass().getResource("resources/audio/backgroundMusic.mp3").toExternalForm());
+            backgroundMusicPlayer = new MediaPlayer(backgroundMusic);
+            backgroundMusicPlayer.setCycleCount(MediaPlayer.INDEFINITE); // Loop indefinitely
+            backgroundMusicPlayer.setVolume(0.5); // Adjust volume as needed
+            backgroundMusicPlayer.play();
+        } catch (Exception e) {
+            System.err.println("Error loading background music: " + e.getMessage());
+        }
     }
     
     public void displayImages(){

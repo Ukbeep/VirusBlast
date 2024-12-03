@@ -1,8 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
-</AnchorPane>
-
+<VBox alignment="CENTER" spacing="20" styleClass="credits-background" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.sceneController">
+<Button fx:id="backToMainMenuButton" focusTraversable="false" layoutX="54.0" layoutY="43.0" onAction="#handleBackToMainMenuButtonAction" text="Back" />
+    <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="720.0" prefWidth="1280.0" VBox.vgrow="ALWAYS">
+        <VBox alignment="CENTER" spacing="15" styleClass="credits-content">
+            <Text styleClass="title" text="Virus Blast" />
+            
+            <VBox alignment="CENTER" spacing="10">
+                <Text styleClass="section-header" text="Created By" />
+                <HBox alignment="CENTER" spacing="10">
+                    <VBox alignment="CENTER">
+                        <ImageView styleClass="developer-image">
+                            <Image url="@resources/img/Animations/hit.png" />
+                        </ImageView>
+                        <Text styleClass="creator-name" text="Dariel Flores" />
+                        <Text styleClass="creator-role" text="Lead Developer" />
+                    </VBox>
+                </HBox>
+            </VBox>
+            
+            <Separator styleClass="credits-separator" />
+            
+            <VBox alignment="CENTER" spacing="10">
+                <Text styleClass="section-header" text="Special Thanks" />
+                
+                <HBox alignment="CENTER" spacing="20">
+                    <VBox alignment="CENTER">
+                        <ImageView styleClass="thanks-image">
+                            <Image url="@resources/img/Orbs/baseOrb.png" />
+                        </ImageView>
+                        <Text styleClass="thanks-name" text="Steve Allen Montero" />
+                        <Text styleClass="thanks-role" text="Laptop Support" />
+                    </VBox>
+                    
+                    <VBox alignment="CENTER">
+                        <HBox alignment="CENTER" spacing="10">
+                            <ImageView styleClass="thanks-image">
+                                <Image url="@resources/img/Orbs/earthOrb.png" />
+                            </ImageView>
+                            <ImageView styleClass="thanks-image">
+                                <Image url="@resources/img/Orbs/heatOrb.png" />
+                            </ImageView>
+                            <ImageView styleClass="thanks-image">
+                                <Image url="@resources/img/Orbs/metalOrb.png" />
+                            </ImageView>
+                        </HBox>
+                        <Text styleClass="thanks-name" text="The Gang" />
+                        <Text styleClass="thanks-role" text="Support and Inspiration" />
+                    </VBox>
+                </HBox>
+                
+                <VBox alignment="CENTER" spacing="5">
+                    <Text styleClass="thanks-name" text="Moral Support" />
+                    <Text styleClass="thanks-role" text="My Girlfriend" />
+               <Text layoutX="103.0" layoutY="44.0" styleClass="thanks-role" text="Ken Romanggar" />
+               <Text layoutX="607.0" layoutY="69.0" styleClass="thanks-role" text="Elijah John Baring" />
+               <Text layoutX="95.0" layoutY="68.0" styleClass="thanks-role" />
+                </VBox>
+                
+                <VBox alignment="CENTER" spacing="10">
+                    <Text styleClass="section-header" text="Technological Inspiration" />
+                    <Text styleClass="ai-thanks" text="ChatGPT, Claude, and Other AI" />
+                </VBox>
+            </VBox>
+            
+            <Separator styleClass="credits-separator" />
+            
+            <VBox alignment="CENTER" spacing="5">
+                <Text styleClass="copyright" text="© 2024 Dariel Flores" />
+                <Text styleClass="copyright-sub" text="All Rights Reserved" />
+            </VBox>
+        </VBox>
+    </ScrollPane>
+</VBox>
