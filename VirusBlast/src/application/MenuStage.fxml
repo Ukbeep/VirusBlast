@@ -6,33 +6,39 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.text.FontWeight?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.sceneController">
+<Pane id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.sceneController">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="125.0" prefHeight="111.0" prefWidth="1280.0">
          <font>
             <Font size="62.0" />
          </font>
       </Label>
-      <ImageView fitHeight="323.0" fitWidth="386.0" layoutX="486.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="411.0" fitWidth="435.0" layoutX="442.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@resources/img/bgImage/logo.png" />
          </image>
       </ImageView>
-      <Button alignment="CENTER" contentDisplay="CENTER" layoutX="510.0" layoutY="411.0" mnemonicParsing="false" onAction="#switchToGame" prefHeight="132.0" prefWidth="272.0" text="Play Game">
+      <Button alignment="CENTER" contentDisplay="CENTER" layoutX="510.0" layoutY="411.0" mnemonicParsing="false" onAction="#switchToGame" prefHeight="132.0" prefWidth="272.0" text="Play Game" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-border-radius: 10; -fx-background-radius: 10;">
          <font>
             <Font size="29.0" />
          </font>
+         <effect>
+            <DropShadow radius="10" offsetX="5" offsetY="5" color="#000000" />
+         </effect>
       </Button>
-      <Button focusTraversable="false" layoutX="869.0" layoutY="326.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="157.0" onAction="#switchToCredits" text="Credits">
-         <font>
-            <Font size="18.0" />
-         </font>
+      <Button focusTraversable="false" layoutX="869.0" layoutY="326.0" mnemonicParsing="false" onAction="#switchToCredits" prefHeight="71.0" prefWidth="157.0" text="Credits" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-border-radius: 10; -fx-background-radius: 10;">
+         <effect>
+            <DropShadow radius="10" offsetX="5" offsetY="5" color="#000000" />
+         </effect>
       </Button>
-      <Button focusTraversable="false" layoutX="265.0" layoutY="331.0" mnemonicParsing="false" onAction="#switchToInstructions" prefHeight="71.0" prefWidth="157.0" text="Instructions">
-         <font>
-            <Font size="18.0" />
-         </font>
+      <Button focusTraversable="false" layoutX="265.0" layoutY="331.0" mnemonicParsing="false" onAction="#switchToInstructions" prefHeight="71.0" prefWidth="157.0" text="Instructions" style="-fx-background-color: #FF9800; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-border-radius: 10; -fx-background-radius: 10;">
+         <effect>
+            <DropShadow radius="10" offsetX="5" offsetY="5" color="#000000" />
+         </effect>
       </Button>
    </children>
 </Pane>

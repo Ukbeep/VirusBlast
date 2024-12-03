@@ -5,6 +5,14 @@
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;
     }
+    
+#menuPane{
+	-fx-background-image: url('resources/img/bgImage/bgImageIntro.jpeg');
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
 #weaknessLabel{
     -fx-font-size: 14px;
     -fx-text-fill: white;
@@ -15,7 +23,6 @@
     -fx-font-size: 24px;
     -fx-text-fill: gold;
 }
-
 
 .credits-background {
     -fx-background-color: #f0f0f0;
@@ -82,4 +89,94 @@
     -fx-font-size: 10px;
     -fx-fill: #bdc3c7;
 }
+
+/* Credits Stylesheet */
+
+.credits-background {
+    -fx-background-color: linear-gradient(to bottom, #2c3e50, #34495e);
+}
+
+.credits-scroll-pane {
+    -fx-background: transparent;
+}
+
+.credits-scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.credits-container {
+    -fx-padding: 40px;
+    -fx-background-color: transparent;
+}
+
+.app-title {
+    -fx-font-family: 'Arial Black';
+    -fx-text-fill: #ff6b6b;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 10, 0, 0, 0);
+}
+
+.section {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 15px;
+    -fx-padding: 20px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
+}
+
+.section-title {
+    -fx-font-size: 24px;
+    -fx-text-fill: #4ecdc4;
+    -fx-font-weight: bold;
+}
+
+.developer-name {
+    -fx-font-size: 28px;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+}
+
+.copyright {
+    -fx-font-size: 14px;
+    -fx-text-fill: #bdc3c7;
+}
+
+.contributor-name {
+    -fx-font-size: 22px;
+    -fx-text-fill: #3498db;
+}
+
+.contributor-role {
+    -fx-font-size: 16px;
+    -fx-text-fill: #95a5a6;
+}
+
+.contributor-photo, .group-photo {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);
+    -fx-background-radius: 50%;
+}
+
+.ai-contributor {
+    -fx-font-size: 18px;
+    -fx-text-fill: #2ecc71;
+}
+
+.closing-message {
+    -fx-font-size: 24px;
+    -fx-text-fill: #4ecdc4;
+    -fx-font-weight: bold;
+}
+
+/* Scrollbar Styling */
+.credits-scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.credits-scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+    -fx-background-radius: 5px;
+}
+
+.credits-scroll-pane .scroll-bar:vertical .track {
+    -fx-background-color: rgba(0, 0, 0, 0.1);
+}
+
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */

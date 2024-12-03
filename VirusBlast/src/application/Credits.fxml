@@ -1,83 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="20" styleClass="credits-background" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.sceneController">
-<Button fx:id="backToMainMenuButton" focusTraversable="false" layoutX="54.0" layoutY="43.0" onAction="#handleBackToMainMenuButtonAction" text="Back" />
-    <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="720.0" prefWidth="1280.0" VBox.vgrow="ALWAYS">
-        <VBox alignment="CENTER" spacing="15" styleClass="credits-content">
-            <Text styleClass="title" text="Virus Blast" />
-            
-            <VBox alignment="CENTER" spacing="10">
-                <Text styleClass="section-header" text="Created By" />
-                <HBox alignment="CENTER" spacing="10">
-                    <VBox alignment="CENTER">
-                        <ImageView styleClass="developer-image">
-                            <Image url="@resources/img/Animations/hit.png" />
-                        </ImageView>
-                        <Text styleClass="creator-name" text="Dariel Flores" />
-                        <Text styleClass="creator-role" text="Lead Developer" />
-                    </VBox>
-                </HBox>
-            </VBox>
-            
-            <Separator styleClass="credits-separator" />
-            
-            <VBox alignment="CENTER" spacing="10">
-                <Text styleClass="section-header" text="Special Thanks" />
-                
-                <HBox alignment="CENTER" spacing="20">
-                    <VBox alignment="CENTER">
-                        <ImageView styleClass="thanks-image">
-                            <Image url="@resources/img/Orbs/baseOrb.png" />
-                        </ImageView>
-                        <Text styleClass="thanks-name" text="Steve Allen Montero" />
-                        <Text styleClass="thanks-role" text="Laptop Support" />
-                    </VBox>
-                    
-                    <VBox alignment="CENTER">
-                        <HBox alignment="CENTER" spacing="10">
-                            <ImageView styleClass="thanks-image">
-                                <Image url="@resources/img/Orbs/earthOrb.png" />
-                            </ImageView>
-                            <ImageView styleClass="thanks-image">
-                                <Image url="@resources/img/Orbs/heatOrb.png" />
-                            </ImageView>
-                            <ImageView styleClass="thanks-image">
-                                <Image url="@resources/img/Orbs/metalOrb.png" />
-                            </ImageView>
-                        </HBox>
-                        <Text styleClass="thanks-name" text="The Gang" />
-                        <Text styleClass="thanks-role" text="Support and Inspiration" />
-                    </VBox>
-                </HBox>
-                
-                <VBox alignment="CENTER" spacing="5">
-                    <Text styleClass="thanks-name" text="Moral Support" />
-                    <Text styleClass="thanks-role" text="My Girlfriend" />
-               <Text layoutX="103.0" layoutY="44.0" styleClass="thanks-role" text="Ken Romanggar" />
-               <Text layoutX="607.0" layoutY="69.0" styleClass="thanks-role" text="Elijah John Baring" />
-               <Text layoutX="95.0" layoutY="68.0" styleClass="thanks-role" />
-                </VBox>
-                
-                <VBox alignment="CENTER" spacing="10">
-                    <Text styleClass="section-header" text="Technological Inspiration" />
-                    <Text styleClass="ai-thanks" text="ChatGPT, Claude, and Other AI" />
-                </VBox>
-            </VBox>
-            
-            <Separator styleClass="credits-separator" />
-            
-            <VBox alignment="CENTER" spacing="5">
-                <Text styleClass="copyright" text="© 2024 Dariel Flores" />
-                <Text styleClass="copyright-sub" text="All Rights Reserved" />
-            </VBox>
-        </VBox>
-    </ScrollPane>
-</VBox>
+<Pane id="creditsPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.CreditsController">
+   <children>
+      <Button fx:id="backToMainMenuButton" layoutX="46.0" layoutY="32.0" mnemonicParsing="false" onAction="#handleBackToMainMenuButtonAction" prefHeight="37.0" prefWidth="60.0" text="Back" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="564.0" layoutY="56.0" prefHeight="45.0" prefWidth="165.0" text="Credits" textAlignment="CENTER">
+         <font>
+            <Font name="Ebrima Bold" size="38.0" />
+         </font>
+      </Label>
+      <Label layoutX="525.0" layoutY="242.0" text="Developer and Founder">
+         <font>
+            <Font name="Copperplate Gothic Light" size="19.0" />
+         </font>
+      </Label>
+      <Label layoutX="563.0" layoutY="206.0" text="Dariel V. Flores" textAlignment="CENTER">
+         <font>
+            <Font name="Dubai Bold" size="27.0" />
+         </font>
+      </Label>
+      <Label layoutX="149.0" layoutY="448.0" text="Laptop provider/friend">
+         <font>
+            <Font name="Copperplate Gothic Light" size="19.0" />
+         </font>
+      </Label>
+      <Label layoutX="163.0" layoutY="412.0" text="Steve Allen Montero" textAlignment="CENTER">
+         <font>
+            <Font name="Dubai Regular" size="27.0" />
+         </font>
+      </Label>
+      <Label layoutX="895.0" layoutY="451.0" text="Food provider/friend">
+         <font>
+            <Font name="Copperplate Gothic Light" size="19.0" />
+         </font>
+      </Label>
+      <Label layoutX="908.0" layoutY="415.0" text="Gian Blaire Jayme" textAlignment="CENTER">
+         <font>
+            <Font name="Dubai Regular" size="27.0" />
+         </font>
+      </Label>
+      <Label layoutX="527.0" layoutY="366.0" text="Moral support/g' friend">
+         <font>
+            <Font name="Copperplate Gothic Light" size="19.0" />
+         </font>
+      </Label>
+      <Label layoutX="563.0" layoutY="330.0" text="Glaiza Pescante" textAlignment="CENTER">
+         <font>
+            <Font name="Dubai Regular" size="27.0" />
+         </font>
+      </Label>
+      <Label layoutX="537.0" layoutY="624.0" text="Moral support/friends">
+         <font>
+            <Font name="Copperplate Gothic Light" size="19.0" />
+         </font>
+      </Label>
+      <Label layoutX="598.0" layoutY="588.0" text="The Gang" textAlignment="CENTER">
+         <font>
+            <Font name="Dubai Regular" size="27.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="150.0" fitWidth="169.0" layoutX="196.0" layoutY="261.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@resources/img/faces/steve.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="172.0" fitWidth="238.0" layoutX="538.0" layoutY="434.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@resources/img/faces/theGang.jpg" />
+         </image></ImageView>
+      <ImageView fitHeight="150.0" fitWidth="169.0" layoutX="928.0" layoutY="270.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@resources/img/faces/gian.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="157.0" layoutY="601.0" text="Technical assistance">
+         <font>
+            <Font name="Copperplate Gothic Light" size="19.0" />
+         </font>
+      </Label>
+      <Label layoutX="218.0" layoutY="565.0" text="ChatGPT" textAlignment="CENTER">
+         <font>
+            <Font name="Dubai Regular" size="27.0" />
+         </font>
+      </Label>
+      <Label layoutX="899.0" layoutY="602.0" text="Technical assistance">
+         <font>
+            <Font name="Copperplate Gothic Light" size="19.0" />
+         </font>
+      </Label>
+      <Label layoutX="973.0" layoutY="566.0" text="Google" textAlignment="CENTER">
+         <font>
+            <Font name="Dubai Regular" size="27.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>

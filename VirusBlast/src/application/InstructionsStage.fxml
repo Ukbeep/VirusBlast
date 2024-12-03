@@ -6,10 +6,12 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1461.0" prefWidth="1280.0" style="-fx-background-image: url('@images/background.png'); -fx-background-size: cover;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.InstructionController">
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="2142.0" prefWidth="1280.0" style="-fx-background-image: url('@images/background.png'); -fx-background-size: cover;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.InstructionController">
     <content>
-        <Pane prefHeight="3000.0" prefWidth="1260.0">
+        <Pane prefHeight="2088.0" prefWidth="1260.0">
             <!-- Back Button -->
             <Button fx:id="backToMainMenuButton" focusTraversable="false" layoutX="54.0" layoutY="43.0" onAction="#handleBackToMainMenuButtonAction" text="Back" />
 
@@ -18,16 +20,16 @@
 
             <!-- Section: Objectives -->
             <Label layoutX="80.0" layoutY="100.0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: black;" text="Objective" />
-            <Label layoutX="100.0" layoutY="140.0" style="-fx-font-size: 20px; -fx-text-fill: black;" text="Stop the viruses before they reach you by destroying them with the correct orb combinations!" />
+            <Label layoutX="100.0" layoutY="147.0" style="-fx-font-size: 20px; -fx-text-fill: black;" text="* Stop the viruses before they reach you by destroying them with the correct orb combinations!" />
 
             <!-- Section: Controls -->
             <Label layoutX="80.0" layoutY="200.0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: black;" text="Controls" />
             <Label layoutX="100.0" layoutY="240.0" style="-fx-font-size: 20px; -fx-text-fill: black;" text="1. Use keys (A, S, D, F, G, H, J, K, L, ;) to select orbs." />
             <Label layoutX="100.0" layoutY="280.0" style="-fx-font-size: 20px; -fx-text-fill: black;" text="2. Press SPACE to fire the orb combination." />
-            <Label layoutX="100.0" layoutY="320.0" style="-fx-font-size: 20px; -fx-text-fill: black;" text="3. Press CTRL to reset the combined orbs!" />
+            <Label layoutX="100.0" layoutY="320.0" style="-fx-font-size: 20px; -fx-text-fill: black;" text="3. Press CTRL to reset the selected orbs" />
 
             <!-- Section: Orb Descriptions with Images -->
-            <Label layoutX="80.0" layoutY="380.0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: black;" text="Orb Types" />
+            <Label layoutX="549.0" layoutY="371.0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: black;" text="Orb Types" />
 
             <!-- Red Orb -->
             <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="255.0" layoutY="614.0" pickOnBounds="true" preserveRatio="true">
@@ -95,35 +97,150 @@
          </ImageView>
          <Label layoutX="757.0" layoutY="539.0" style="-fx-font-size: 20px; -fx-text-fill: black;" text="Brown Orb (J): Earth Element" />
          <!-- Section: Virus Types -->
-		<Label layoutX="80.0" layoutY="900.0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: black;" text="Virus Types" />
+		<Label layoutX="529.0" layoutY="910.0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: black;" text="Virus Types" />
 		
 		<!-- Basic Virus -->
-		<Label layoutX="100.0" layoutY="950.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black;" text="1. Basic Virus" />
-		<Label layoutX="120.0" layoutY="990.0" style="-fx-font-size: 20px; -fx-text-fill: black;" text="Weaknesses: Heat" />
+		<Label layoutX="111.0" layoutY="1004.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black;" text="Basic Virus" />
 		
 		<!-- Double Combination Virus -->
-		<Label layoutX="100.0" layoutY="1030.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black;" text="2. Double Combination Virus" />
-		<Label layoutX="120.0" layoutY="1070.0" style="-fx-font-size: 20px; -fx-text-fill: black;" text="Weaknesses: Acid, Heat" />
+		<Label layoutX="358.0" layoutY="1003.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black;" text="Double Orb Virus" />
+		<Label layoutX="294.0" layoutY="1351.0" style="-fx-font-size: 20px; -fx-text-fill: black;" />
 		
 		<!-- Triple Combination Virus -->
-		<Label layoutX="100.0" layoutY="1110.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black;" text="3. Triple Combination Virus" />
-		<Label layoutX="120.0" layoutY="1150.0" style="-fx-font-size: 20px; -fx-text-fill: black;" text="Weaknesses: Heat, Electric, Metal" />
+		<Label layoutX="683.0" layoutY="1001.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black;" text="Triple Orb Virus" />
 		
 		<!-- Partial Immunity Virus -->
-		<Label layoutX="100.0" layoutY="1190.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black;" text="4. Partial Immunity Virus" />
-		<Label layoutX="120.0" layoutY="1230.0" style="-fx-font-size: 20px; -fx-text-fill: black;" text="Weaknesses: Cold, Bio" />
+		<Label layoutX="962.0" layoutY="1000.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black;" text="Partial Immunity Virus" />
 		
 		<!-- Fast Virus -->
-		<Label layoutX="100.0" layoutY="1270.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black;" text="5. Fast Virus" />
-		<Label layoutX="120.0" layoutY="1310.0" style="-fx-font-size: 20px; -fx-text-fill: black;" text="Weaknesses: Cold, Electric" />
+		<Label layoutX="1044.0" layoutY="1320.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black;" text="Fast Virus" />
 		
 		<!-- Tank Virus -->
-		<Label layoutX="577.0" layoutY="946.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black;" text="6. Tank Virus" />
-		<Label layoutX="582.0" layoutY="985.0" style="-fx-font-size: 20px; -fx-text-fill: black;" text="Weaknesses: Acid, Chemical, Heat, Metal, Electric, Base" />
+		<Label layoutX="178.0" layoutY="1331.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black;" text="Tank Virus" />
 		
 		<!-- Boss Virus -->
-		<Label layoutX="585.0" layoutY="1070.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black;" text="7. Boss Virus" />
-		<Label layoutX="590.0" layoutY="1115.0" style="-fx-font-size: 20px; -fx-text-fill: black;" text="Weaknesses: Heat, Electric, Cold, Bio, Chemical, Base, Acid" />
+		<Label layoutX="615.0" layoutY="1330.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black;" text="Boss Virus" />
+         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="89.0" layoutY="1032.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@resources/img/Viruses/basicVirus.png" />
+            </image>
+         </ImageView>
+         <Text layoutX="150.0" layoutY="1208.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Heat">
+            <font>
+               <Font name="System Italic" size="25.0" />
+            </font>
+         </Text>
+         <Text layoutX="133.0" layoutY="1238.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Weakness">
+            <font>
+               <Font size="21.0" />
+            </font>
+         </Text>
+         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="367.0" layoutY="1026.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@resources/img/Viruses/double_orb.png" />
+            </image>
+         </ImageView>
+         <Text layoutX="388.0" layoutY="1209.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Acid + Heat">
+            <font>
+               <Font name="System Italic" size="25.0" />
+            </font>
+         </Text>
+         <Text layoutX="402.0" layoutY="1238.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Weakness">
+            <font>
+               <Font size="21.0" />
+            </font>
+         </Text>
+         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="680.0" layoutY="1025.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@resources/img/Viruses/triple_orb.png" />
+            </image>
+         </ImageView>
+         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="1013.0" layoutY="1024.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@resources/img/Viruses/partial_immunity.png" />
+            </image>
+         </ImageView>
+         <Text layoutX="641.0" layoutY="1203.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Heat + Electric + Metal">
+            <font>
+               <Font name="System Italic" size="25.0" />
+            </font>
+         </Text>
+         <Text layoutX="716.0" layoutY="1235.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Weakness">
+            <font>
+               <Font size="21.0" />
+            </font>
+         </Text>
+         <Text layoutX="976.0" layoutY="1203.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cold + Bio + Cold + Bio">
+            <font>
+               <Font name="System Italic" size="25.0" />
+            </font>
+         </Text>
+         <Text layoutX="1043.0" layoutY="1231.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Weakness">
+            <font>
+               <Font size="21.0" />
+            </font>
+         </Text>
+         <ImageView fitHeight="266.0" fitWidth="249.0" layoutX="111.0" layoutY="1367.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@resources/img/Viruses/tankVirus.png" />
+            </image>
+         </ImageView>
+         <Text layoutX="105.0" layoutY="1633.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Acid + checmical + heat ">
+            <font>
+               <Font name="System Italic" size="25.0" />
+            </font>
+         </Text>
+         <Text layoutX="95.0" layoutY="1664.0" strokeType="OUTSIDE" strokeWidth="0.0" text="+ Metal + Electric + Base">
+            <font>
+               <Font name="System Italic" size="25.0" />
+            </font>
+         </Text>
+         <Text layoutX="179.0" layoutY="1696.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Weakness">
+            <font>
+               <Font size="21.0" />
+            </font>
+         </Text>
+         <ImageView fitHeight="266.0" fitWidth="249.0" layoutX="978.0" layoutY="1360.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@resources/img/Viruses/fastVirus.png" />
+            </image>
+         </ImageView>
+         <Text layoutX="1019.0" layoutY="1614.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cold + Electric">
+            <font>
+               <Font name="System Italic" size="25.0" />
+            </font>
+         </Text>
+         <Text layoutX="1056.0" layoutY="1644.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Weakness">
+            <font>
+               <Font size="21.0" />
+            </font>
+         </Text>
+         <ImageView fitHeight="552.0" fitWidth="338.0" layoutX="513.0" layoutY="1370.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@resources/img/Viruses/bossVirus.png" />
+            </image>
+         </ImageView>
+         <Text layoutX="556.0" layoutY="1944.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Heat+ Electric+ Cold">
+            <font>
+               <Font name="System Italic" size="25.0" />
+            </font>
+         </Text>
+         <Text layoutX="537.0" layoutY="1975.0" strokeType="OUTSIDE" strokeWidth="0.0" text="+ Bio+ Chemical+ Base">
+            <font>
+               <Font name="System Italic" size="25.0" />
+            </font>
+         </Text>
+         <Text layoutX="630.0" layoutY="2030.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Weakness">
+            <font>
+               <Font size="21.0" />
+            </font>
+         </Text>
+         <Text layoutX="512.0" layoutY="2002.0" strokeType="OUTSIDE" strokeWidth="0.0" text="+ Acid+ Heat+ Heat + Electric">
+            <font>
+               <Font name="System Italic" size="25.0" />
+            </font>
+         </Text>
+         <Label layoutX="100.0" layoutY="174.0" style="-fx-font-size: 20px; -fx-text-fill: black;" text="* Survive as long as you can against the marching death" />
         </Pane>
     </content>
 </ScrollPane>

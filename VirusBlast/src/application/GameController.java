@@ -134,11 +134,11 @@ public class GameController {
         "boss", 100
     );
    
-    private int playerHealth = 0; // Player's health
+    private int playerHealth = 100; // Player's health
     private boolean isGameOver = false; // Track if the game is over
 
     public void initialize() {
-    	
+    	 gamePane.getStylesheets().add(getClass().getResource("application.css").toExternalForm()); 
     	setupBackgroundMusic();
     	try {
             virusDestroySound = new AudioClip(getClass().getResource("resources/audio/hitAudio.mp3").toExternalForm());
@@ -912,8 +912,7 @@ private void handleOrbClick(ActionEvent event) {
             summaryStage.setTitle("Game Over");
             summaryStage.show();
             summaryController.setGameStage((Stage) gamePane.getScene().getWindow()); // Pass the existing game stage
-            // Save statistics only if current results surpass previous high scores
-
+            summaryController.setStage(summaryStage);
         } catch (IOException e) {
             e.printStackTrace(); // Print the stack trace for debugging
         }
@@ -922,7 +921,7 @@ private void handleOrbClick(ActionEvent event) {
     public void resetGame() {
         // Reset game statistics
         currentScore = 0;
-        playerHealth = 0;
+        playerHealth = 100;
         currentOrbs.clear();
         currentCombo = 0; // Reset current combo
         highestComboStreak = 0; // Explicitly reset highest combo streak

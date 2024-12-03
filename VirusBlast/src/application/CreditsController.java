@@ -16,42 +16,23 @@ public class CreditsController {
     	@FXML
     	Button backToMainMenuButton;
     	
-        @FXML
-        private ScrollPane creditsScrollPane;
-        
-        @FXML
-        private VBox creditsContent;
-        
-        @FXML
-        public void initialize() {
-            // Any initialization logic can go here
-            // For example, dynamically loading images or additional content
-            
-            // Ensure the scroll pane is always scrollable
-            creditsScrollPane.setFitToWidth(true);
-            creditsScrollPane.setFitToHeight(true);
-        }
-    	
     	@FXML
-        private void handleBackToMainMenuButtonAction() {
-            try {
-                // Load the main menu FXML
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("MenuStage.fxml")); // Ensure the path is correct
-                Parent mainMenuView = loader.load();
-                
-                // Create a new stage for the main menu
-                Stage mainMenuStage = new Stage();
-                mainMenuStage.setScene(new Scene(mainMenuView));
-                mainMenuStage.setTitle("Main Menu");
-                mainMenuStage.show();
-                
-                // Close the current score stage
-                Stage currentStage = (Stage) backToMainMenuButton.getScene().getWindow();
-                currentStage.close();
-            } catch (IOException e) {
-                e.printStackTrace(); // Print stack trace for debugging
-            }
-        }
+    	private void handleBackToMainMenuButtonAction() {
+    	    try {
+    	        // Load the main menu FXML
+    	        Parent mainMenuView = FXMLLoader.load(getClass().getResource("MenuStage.fxml")); // Ensure the path is correct
+    	        
+    	        // Get the current stage and set the new scene
+    	        Stage currentStage = (Stage) backToMainMenuButton.getScene().getWindow();
+    	        Scene newScene = new Scene(mainMenuView);
+    	        currentStage.setScene(newScene);
+    	        newScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+    	        // Optionally, you can set the title again if needed
+    	        currentStage.setTitle("Main Menu");
+    	    } catch (IOException e) {
+    	        e.printStackTrace(); // Print stack trace for debugging
+    	    }
+    	}
 
     }
 

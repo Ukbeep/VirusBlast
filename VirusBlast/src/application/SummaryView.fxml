@@ -2,14 +2,27 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="269.0" prefWidth="274.0" spacing="10" style="-fx-padding: 20;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="application.SummaryController">
-    <Label fx:id="totalVirusesDefeatedLabel" />
-    <Label fx:id="finalScoreLabel" />
-    <Label fx:id="highestComboStreakLabel" />
-    <Label fx:id="accuracyPercentageLabel" />
-    <Label fx:id="timePlayedLabel" />
-<Button fx:id="restartButton" focusTraversable="false" onAction="#handleRestartButtonAction" text="Restart Game" />
-<Button fx:id="mainMenuButton" focusTraversable="false" onAction="#handleMainMenuButtonAction" text="Main Menu" />
-</VBox>
+<StackPane style="-fx-background-color: #2C3E50;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SummaryController">
+    <VBox alignment="CENTER" prefHeight="400.0" prefWidth="300.0" spacing="20" style="-fx-padding: 20; -fx-background-color: #34495E; -fx-background-radius: 15;">
+        <Label fx:id="totalVirusesDefeatedLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;" textFill="white" />
+        <Label fx:id="finalScoreLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;" textFill="white" />
+        <Label fx:id="highestComboStreakLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;" textFill="white" />
+        <Label fx:id="accuracyPercentageLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;" textFill="white" />
+        <Label fx:id="timePlayedLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;" textFill="white" />
+
+        <Button fx:id="restartButton" focusTraversable="false" onAction="#handleRestartButtonAction" style="-fx-background-color: #27AE60; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10; -fx-pref-width: 150;" text="Restart Game">
+            <effect>
+                <DropShadow color="#000000" offsetX="2" offsetY="2" radius="5" />
+            </effect>
+        </Button>
+        <Button fx:id="mainMenuButton" focusTraversable="false" onAction="#handleMainMenuButtonAction" style="-fx-background-color: #2980B9; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10; -fx-pref-width: 150;" text="Main Menu">
+            <effect>
+                <DropShadow color="#000000" offsetX="2" offsetY="2" radius="5" />
+            </effect>
+        </Button>
+    </VBox>
+</StackPane>

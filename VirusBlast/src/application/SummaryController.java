@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class SummaryController {
     @FXML
@@ -34,9 +35,16 @@ public class SummaryController {
     private GameController gameController;
 
     public void setGameStage(Stage gameStage) {
-        this.gameStage = gameStage;
+        this.gameStage = gameStage; 
+        gameStage.setOnCloseRequest(this::handleCloseRequest);
+        
     }
 
+    public void setStage(Stage stage) {
+        // Set the close request handler
+        stage.setOnCloseRequest(this::handleCloseRequest);
+    }
+    
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
     }
@@ -54,30 +62,35 @@ public class SummaryController {
 
     @FXML
     private void handleMainMenuButtonAction() {
-        // Logic to go back to the main menu
         try {
             // Load the main menu FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("MenuStage.fxml")); // Ensure the path is correct
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("MenuStage.fxml"));
             Parent mainMenuView = loader.load();
-            
-            // Create a new stage for the main menu
+
+            // Create and set up the main menu stage
             Stage mainMenuStage = new Stage();
-            mainMenuStage.setScene(new Scene(mainMenuView));
+            Scene mainMenuScene = new Scene(mainMenuView);
+            
+            // Optional: Add CSS styling
+            mainMenuScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+            
+            mainMenuStage.setScene(mainMenuScene);
             mainMenuStage.setTitle("Main Menu");
             mainMenuStage.show();
-            
-            Stage currentGameStage2 = (Stage) mainMenuButton.getScene().getWindow();
-            currentGameStage2.close(); // This will close the game stage
-            
+
+            // Close the current stages
+            Stage currentStage = (Stage) mainMenuButton.getScene().getWindow();
+            currentStage.close();
+
+            // Safely close gameStage if it exists
             if (gameStage != null) {
-                Stage currentGameStage = (Stage) gameStage.getScene().getWindow();
-                currentGameStage.close(); // This will close the game stage
-            } else {
-                System.out.println("gameStage is null, cannot close.");
+                gameStage.close();
             }
-           
+
         } catch (IOException e) {
-            e.printStackTrace(); // Print stack trace for debugging
+            // Log the error with more context
+            System.err.println("Error loading main menu: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -88,7 +101,7 @@ public class SummaryController {
         finalScoreLabel.setText("Final Score: " + finalScore);
         highestComboStreakLabel.setText("Highest Combo Streak: " + highestComboStreak);
         accuracyPercentageLabel.setText("Accuracy: " + String.format("%.2f%%", accuracyPercentage));
-        timePlayedLabel.setText(formatTime(timePlayed));
+        timePlayedLabel.setText("Time Played" + formatTime(timePlayed));
 
         // Optional: Save the current game's statistics
         GameStatistics stats = GameStatistics.getInstance();
@@ -100,6 +113,12 @@ public class SummaryController {
         long minutes = seconds / 60;
         long remainingSeconds = seconds % 60;
         return String.format("%02d:%02d", minutes, remainingSeconds);
+    }
+    
+    private void handleCloseRequest(WindowEvent event) {
+        event.consume(); // Prevent the window from closing
+        // Optionally, you can show an alert or status message if needed
+        System.out.println("The close button is disabled for this view.");
     }
 
 }
