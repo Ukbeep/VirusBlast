@@ -4,48 +4,41 @@ import java.io.IOException;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 public class SummaryController {
     @FXML
     private Label totalVirusesDefeatedLabel;
+    
     @FXML
     private Label finalScoreLabel;
+    
     @FXML
     private Label highestComboStreakLabel;
+    
     @FXML
     private Label accuracyPercentageLabel;
+    
     @FXML
     private Label timePlayedLabel;
-    @FXML
-    private Button restartButton;
-    @FXML
-    private Button mainMenuButton;
 
-    private GameController gameController; // Reference to the GameController
+    @FXML
+    Button restartButton, mainMenuButton;
     
+    private Stage summaryStage;
     private Stage gameStage;
-    
-    public void displaySummary(int totalVirusesDefeated, int finalScore, int highestComboStreak, double accuracyPercentage, long timePlayed) {
-        // Use the passed parameters instead of retrieving from GameStatistics
-        totalVirusesDefeatedLabel.setText("Total Viruses Defeated: " + totalVirusesDefeated);
-        finalScoreLabel.setText("Final Score: " + finalScore);
-        highestComboStreakLabel.setText("Highest Combo Streak: " + highestComboStreak);
-        accuracyPercentageLabel.setText("Accuracy: " + String.format("%.2f%%", accuracyPercentage));
-        timePlayedLabel.setText("Time Played: " + timePlayed + " seconds");
+    private GameController gameController;
 
-        // Optional: Save the current game's statistics
-        GameStatistics stats = GameStatistics.getInstance();
-        stats.setFinalScore(finalScore);
-        GameStatistics.getInstance().saveStatistics();
+    public void setGameStage(Stage gameStage) {
+        this.gameStage = gameStage;
     }
 
     public void setGameController(GameController gameController) {
-        this.gameController = gameController; // Set the GameController reference
+        this.gameController = gameController;
     }
 
     @FXML
@@ -58,11 +51,7 @@ public class SummaryController {
         Stage summaryStage = (Stage) restartButton.getScene().getWindow();
         summaryStage.close();
     }
-    
-    public void setGameStage(Stage stage) {
-        this.gameStage = stage; // Store the reference to the Game Stage
-    }
-    
+
     @FXML
     private void handleMainMenuButtonAction() {
         // Logic to go back to the main menu
@@ -91,4 +80,26 @@ public class SummaryController {
             e.printStackTrace(); // Print stack trace for debugging
         }
     }
+
+    // Method to display summary details
+    public void displaySummary(int totalVirusesDefeated, int finalScore, int highestComboStreak, double accuracyPercentage, long timePlayed) {
+        // Use the passed parameters instead of retrieving from GameStatistics
+        totalVirusesDefeatedLabel.setText("Total Viruses Defeated: " + totalVirusesDefeated);
+        finalScoreLabel.setText("Final Score: " + finalScore);
+        highestComboStreakLabel.setText("Highest Combo Streak: " + highestComboStreak);
+        accuracyPercentageLabel.setText("Accuracy: " + String.format("%.2f%%", accuracyPercentage));
+        timePlayedLabel.setText(formatTime(timePlayed));
+
+        // Optional: Save the current game's statistics
+        GameStatistics stats = GameStatistics.getInstance();
+        stats.setFinalScore(finalScore);
+    }
+
+    // Helper method to format time
+    private String formatTime(long seconds) {
+        long minutes = seconds / 60;
+        long remainingSeconds = seconds % 60;
+        return String.format("%02d:%02d", minutes, remainingSeconds);
+    }
+
 }
